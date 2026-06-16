@@ -106,19 +106,12 @@ if __name__ == "__main__":
     load_env_file()
 
     # Step 2: Validate setup
+    if __name__ == '__main__':
+    load_env_file()
     validate_setup()
-
-    # Step 3: Start Flask app
-    # We import here (after env is loaded) so modules pick up env vars
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "backend"))
-    from app import app
-
-    host = os.environ.get("FLASK_HOST", "0.0.0.0")
-    port = int(os.environ.get("FLASK_PORT", 5000))
-    debug = os.environ.get("FLASK_DEBUG", "True").lower() == "true"
-
-    print(f"🚀 Server running at: http://localhost:{port}")
-    print(f"⚙️  Admin panel at:   http://localhost:{port}/admin")
-    print("   Press Ctrl+C to stop\n")
-
-    app.run(host=host, port=port, debug=debug)
+    
+    port = int(os.environ.get('PORT', 5000))
+    host = '0.0.0.0'
+    
+    from backend.app import app
+    app.run(host=host, port=port, debug=False)

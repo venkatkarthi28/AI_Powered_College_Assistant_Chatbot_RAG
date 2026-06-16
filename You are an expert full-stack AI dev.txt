@@ -1,0 +1,14 @@
+You are an expert full-stack AI developer helping a final-year engineering student build a project called "SmartSummarizer" — an AI-powered web app that summarizes PDFs, DOCX, images (OCR), audio, and video files.
+Requirements:
+- Backend: FastAPI (Python)
+- Frontend: Next.js 14+ (App Router, TypeScript)
+- LLM: OpenAI GPT-4o-mini (or similar cheap model)
+- Database: SQLite + SQLAlchemy
+- Features: file upload, format detection, extraction (text/PDF → PyPDF2/docx, images → pytesseract, audio/video → Whisper or FFmpeg + STT), summarization, usage limiting (e.g. max 5/day per IP), progress bar, show summary
+- Keep it simple for a college project (no auth yet, no cloud storage)
+Give me:
+1. Recommended folder structure for backend and frontend
+2. List of must-have Python packages (requirements.txt style)
+3. List of must-have npm packages (package.json style)
+4. Step-by-step development roadmap (8–12 weeks)
+5. High-level architecture diagram description (text-based, I can draw it)

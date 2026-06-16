@@ -1,0 +1,3897 @@
+now i can share the full content and the report website output .now what you can to do means in the campaign performance i can click any particular campaign means it be goes to straingt a single campaing its not a right .i can share the another campaign module in there i can click the chrimas campaign in the so many carts or schedules arfe available in that particular chrimas campaign itself like that nos in my report module i can click the example chrimast blast means in inside the new screen shows the carts of in the chrimas campaign cards can showsthe which are completed , scheduled , inprogress like that full history clearly and easly to identifiing . like that all campaign performance .net colore like praogress means yello and then success means in be fgreen like that etc.. you can give an color eastly to idetiy what [tells.like](http://tells.like) that in that website ther is no schroll down and up so change that aned in inside receipt hstory you can remove it.
+
+
+
+
+Claude finished the response
+You said: now next people module i can share the people thing you can take the context only .
+1777533674425_WhatsApp Image 2026-04-30 at 12.49.49 PM.jpeg
+
+You said: You are a senior full-stack engineer. You are a senior full-stack engineer. I am building a SaaS Email Marketing application named "Provassure Campaigns" similar to Zoho Campaigns. I am responsible ONLY for the "Reports & Analytics Module" in a team of 4 developers. TECH STACK: Front
+
+pasted
+
+now next people module i can share the people thing you can take the context only .you cant't take ui color in that screenshots.previously we done report module know now continue it people module that total file structure ee can create and modify in that whole tructure code . the frontend backend and with database .related to previous prov report module to that .
+
+30 Apr
+Claude responded: Now let me analyze the existing codebase from the conversation context and build the People module: Now the frontend: Now package everything: Here's the comple…
+
+Ran a command, viewed a file
+Ran a command, viewed a file
+Now let me analyze the existing codebase from the conversation context and build the People module:
+
+
+Created 6 files, ran a command
+Created 6 files, ran a command
+Now the frontend:
+
+
+Created 9 files
+Created 9 files
+Now package everything:
+
+
+Ran a command, read a file
+Ran a command, read a file
+Here's the complete People module — 12 files across backend and frontend. Here's exactly what's inside and how to plug it in:
+
+What's built
+Backend (4 files):
+
+models/Contact.js — schema with orgId, tags, listIds, isVip, emailStatus, avatarInitials, multi-tenant indexes
+models/ContactList.js — named segments with contact count denormalization
+controllers/peopleController.js — all business logic: summary, CRUD, bulk delete, CSV import/export, tags, lists
+routes/peopleRoutes.js — all 14 endpoints wired with your existing auth middleware
+seed/peopleSeed.js — 60 realistic contacts + 5 lists
+Frontend (7 files):
+
+pages/PeoplePage.jsx — main page, orchestrates all state and modals
+components/people/PeopleSummaryCards.jsx — 4 KPI cards (Total, VIP, Lists, Valid Emails)
+components/people/ContactTable.jsx — tabs, checkboxes, avatar initials, tag/list badges, pagination
+components/people/AddContactModal.jsx — Add + Edit contact (same modal)
+components/people/CreateListModal.jsx — create named list with color picker
+components/people/ImportCSVModal.jsx — file picker, client-side CSV parse, preview + import
+services/peopleService.js — all API calls using your existing api.js instance
+people.css — styles to add to your global CSS
+How to plug in — 5 steps
+Step 1 — Copy backend files:
+
+ProvaCampaign_BE/models/Contact.js        ← new
+ProvaCampaign_BE/models/ContactList.js    ← new
+ProvaCampaign_BE/controllers/peopleController.js  ← new
+ProvaCampaign_BE/routes/peopleRoutes.js   ← new
+ProvaCampaign_BE/seed/peopleSeed.js       ← new
+Step 2 — Add 2 lines to server.js (see server-additions.js):
+
+js
+const peopleRoutes = require('./routes/peopleRoutes');
+app.use('/api/people', peopleRoutes);
+Step 3 — Run seed:
+
+powershell
+cd D:\prova\ProvaCampaign_BE
+node seed/peopleSeed.js
+Step 4 — Copy frontend files into ProvaCampaign_FE/src/:
+
+pages/PeoplePage.jsx
+components/people/   (all 5 files)
+services/peopleService.js
+people.css  → paste into your existing global CSS
+Step 5 — Add route to App.jsx:
+
+jsx
+import PeoplePage from './pages/PeoplePage';
+// inside <Routes>:
+<Route path="/people" element={<PeoplePage />} />
+Then go to http://localhost:5173/people — you'll see the full People module with 60 seeded contacts.
+
+
+People module
+ZIP 
+You said: give a structure where to place the code
+give a structure where to place the code
+
+30 Apr
+Claude responded: Looking at your project structure from the conversation, here's exactly where to place every file:
+Looking at your project structure from the conversation, here's exactly where to place every file:
+
+Backend — ProvaCampaign_BE
+ProvaCampaign_BE/
+├── models/
+│   ├── Campaign.js          ← already exists
+│   ├── EmailLog.js          ← already exists (from reports)
+│   ├── Event.js             ← already exists (from reports)
+│   ├── Contact.js           ← NEW → paste Contact.js here
+│   └── ContactList.js       ← NEW → paste ContactList.js here
+│
+├── controllers/
+│   ├── reportController.js  ← already exists
+│   ├── peopleController.js  ← NEW → paste peopleController.js here
+│
+├── routes/
+│   ├── reportRoutes.js      ← already exists
+│   ├── trackingRoutes.js    ← already exists
+│   └── peopleRoutes.js      ← NEW → paste peopleRoutes.js here
+│
+├── seed/
+│   ├── reportSeed.js        ← already exists
+│   └── peopleSeed.js        ← NEW → paste peopleSeed.js here
+│
+├── middleware/
+│   └── authMiddleware.js    ← already exists (used by peopleRoutes)
+│
+├── server.js                ← MODIFY → add 2 lines (see below)
+├── .env                     ← already exists
+└── package.json             ← already exists
+Modify server.js — add these 2 lines:
+
+js
+// with other requires at the top:
+const peopleRoutes = require('./routes/peopleRoutes');
+
+// with other app.use() lines:
+app.use('/api/people', peopleRoutes);
+Frontend — ProvaCampaign_FE
+ProvaCampaign_FE/
+└── src/
+    ├── pages/
+    │   ├── ReportsPage.jsx     ← already exists
+    │   └── PeoplePage.jsx      ← NEW → paste here
+    │
+    ├── components/
+    │   ├── reports/            ← already exists
+    │   └── people/             ← NEW → create this folder
+    │       ├── PeopleSummaryCards.jsx   ← NEW
+    │       ├── ContactTable.jsx         ← NEW
+    │       ├── AddContactModal.jsx      ← NEW
+    │       ├── CreateListModal.jsx      ← NEW
+    │       └── ImportCSVModal.jsx       ← NEW
+    │
+    ├── services/
+    │   ├── api.js              ← already exists
+    │   ├── reportService.js    ← already exists
+    │   └── peopleService.js    ← NEW → paste here
+    │
+    ├── App.jsx                 ← MODIFY → add route (see below)
+    ├── people.css              ← NEW → paste here (or merge into existing CSS)
+    └── main.jsx                ← already exists
+Modify App.jsx — add 2 things:
+
+jsx
+// 1. Add import at the top:
+import PeoplePage from './pages/PeoplePage';
+
+// 2. Add route inside <Routes>:
+<Route path="/people" element={<PeoplePage />} />
+Import the CSS in PeoplePage.jsx — add at the top:
+
+jsx
+import '../people.css';
+Run order after placing files
+powershell
+# Terminal 1 — Backend
+cd D:\prova\ProvaCampaign_BE
+node seed/peopleSeed.js     ← run once to seed data
+npm run dev                 ← keep running
+
+# Terminal 2 — Frontend
+cd D:\prova\ProvaCampaign_FE
+npm run dev                 ← keep running
+Then open: http://localhost:5173/people
+
+You said: its shows already ?
+Screenshot 2026-04-30 130106.png
+its shows already ?
+
+30 Apr
+Claude responded: Yes!
+Yes! ContactList.js already exists in your models folder. That means it was already created from before.
+
+Just skip creating ContactList.js again — it's already there. ✅
+
+Here's your current status based on the screenshot:
+
+Models folder — what's already there:
+
+models/
+├── ContactList.js   ✅ already exists — SKIP
+├── EmailBlock.js    ✅ already exists
+├── EmailLog.js      ✅ already exists (U = unsaved/new)
+└── Event.js         ✅ already exists (U = unsaved/new)
+So you only need to add Contact.js to models — that one is missing. Create a new file called Contact.js (not ContactList) and paste the Contact.js code there.
+
+Quick checklist of what still needs to be added:
+
+models/
+└── Contact.js              ← CREATE this (missing)
+
+controllers/
+└── peopleController.js     ← CREATE this
+
+routes/
+└── peopleRoutes.js         ← CREATE this
+
+seed/
+└── peopleSeed.js           ← CREATE this
+
+server.js                   ← MODIFY (add 2 lines)
+For frontend — I can see ProvaCampaign_FE/src/ has components, pages, and services folders. Inside those:
+
+pages/
+└── PeoplePage.jsx          ← CREATE this
+
+components/people/          ← CREATE this folder, then add all 5 files
+services/
+└── peopleService.js        ← CREATE this
+Go ahead and create Contact.js in models first — that's the next step!
+
+You said: created the file next codes ?
+created the file next codes ?
+
+30 Apr
+Claude responded: Here are all the codes to paste, in order:
+Here are all the codes to paste, in order:
+
+1. models/Contact.js
+js
+const mongoose = require('mongoose');
+
+/**
+ * Contact Schema — core entity for the People module
+ * Supports multi-tenancy via orgId
+ */
+const contactSchema = new mongoose.Schema(
+  {
+    orgId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      index: true,
+    },
+
+    firstName: { type: String, required: true, trim: true },
+    lastName:  { type: String, default: '',   trim: true },
+    email:     { type: String, required: true, lowercase: true, trim: true },
+    phone:     { type: String, default: '' },
+    avatarInitials: { type: String },
+
+    tags:    { type: [String], default: [] },
+    listIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ContactList' }],
+
+    isVip:        { type: Boolean, default: false },
+    isSubscribed: { type: Boolean, default: true },
+    emailStatus:  { type: String, enum: ['valid', 'invalid', 'unknown'], default: 'valid' },
+
+    source:   { type: String, enum: ['manual', 'csv', 'api'], default: 'manual' },
+    company:  { type: String, default: '' },
+    location: { type: String, default: '' },
+    notes:    { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+// One email per org
+contactSchema.index({ orgId: 1, email: 1 }, { unique: true });
+
+// Auto-generate avatar initials on save
+contactSchema.pre('save', function (next) {
+  if (this.isModified('firstName') || this.isModified('lastName')) {
+    const f = (this.firstName || '').charAt(0).toUpperCase();
+    const l = (this.lastName  || '').charAt(0).toUpperCase();
+    this.avatarInitials = f + l || f;
+  }
+  next();
+});
+
+module.exports = mongoose.model('Contact', contactSchema);
+2. controllers/peopleController.js
+js
+const Contact     = require('../models/Contact');
+const ContactList = require('../models/ContactList');
+const mongoose    = require('mongoose');
+
+const toObjId = (id) => new mongoose.Types.ObjectId(id);
+
+// ── SUMMARY ──────────────────────────────────────────────
+exports.getSummary = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+
+    const [totals, listCount] = await Promise.all([
+      Contact.aggregate([
+        { $match: { orgId } },
+        {
+          $group: {
+            _id: null,
+            total:      { $sum: 1 },
+            vip:        { $sum: { $cond: ['$isVip', 1, 0] } },
+            validEmail: { $sum: { $cond: [{ $eq: ['$emailStatus', 'valid'] }, 1, 0] } },
+          },
+        },
+      ]),
+      ContactList.countDocuments({ orgId }),
+    ]);
+
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const newThisMonth = await Contact.countDocuments({ orgId, createdAt: { $gte: startOfMonth } });
+
+    const t = totals[0] || { total: 0, vip: 0, validEmail: 0 };
+
+    res.json({
+      success: true,
+      data: {
+        totalContacts:  t.total,
+        vipCount:       t.vip,
+        listCount,
+        validEmailRate: t.total ? Math.round((t.validEmail / t.total) * 100) : 0,
+        newThisMonth,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── GET ALL CONTACTS ──────────────────────────────────────
+exports.getContacts = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const { page = 1, limit = 15, search, tag, listId, tab = 'all' } = req.query;
+
+    const match = { orgId };
+
+    if (tab === 'tagged')  match.tags    = { $exists: true, $not: { $size: 0 } };
+    if (tab === 'lists')   match.listIds = { $exists: true, $not: { $size: 0 } };
+    if (tab === 'recent') {
+      const last7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      match.createdAt = { $gte: last7 };
+    }
+
+    if (tag)    match.tags    = tag;
+    if (listId) match.listIds = toObjId(listId);
+
+    if (search) {
+      match.$or = [
+        { firstName: { $regex: search, $options: 'i' } },
+        { lastName:  { $regex: search, $options: 'i' } },
+        { email:     { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const skip  = (Number(page) - 1) * Number(limit);
+    const total = await Contact.countDocuments(match);
+
+    const contacts = await Contact.find(match)
+      .populate('listIds', 'name color')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    res.json({
+      success: true,
+      data: contacts,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        pages: Math.ceil(total / Number(limit)),
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── GET SINGLE CONTACT ────────────────────────────────────
+exports.getContact = async (req, res) => {
+  try {
+    const orgId   = toObjId(req.user.orgId);
+    const contact = await Contact.findOne({ _id: req.params.id, orgId })
+      .populate('listIds', 'name color');
+    if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
+    res.json({ success: true, data: contact });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── CREATE CONTACT ────────────────────────────────────────
+exports.createContact = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const { firstName, lastName, email, phone, tags, listIds, isVip, company, location, notes } = req.body;
+
+    const contact = await Contact.create({
+      orgId, firstName, lastName, email, phone,
+      tags: tags || [], listIds: listIds || [],
+      isVip: isVip || false, company, location, notes,
+      source: 'manual',
+    });
+
+    if (listIds && listIds.length) {
+      await ContactList.updateMany({ _id: { $in: listIds } }, { $inc: { contactCount: 1 } });
+    }
+
+    res.status(201).json({ success: true, data: contact });
+  } catch (err) {
+    if (err.code === 11000) return res.status(409).json({ success: false, message: 'Email already exists' });
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── UPDATE CONTACT ────────────────────────────────────────
+exports.updateContact = async (req, res) => {
+  try {
+    const orgId   = toObjId(req.user.orgId);
+    const allowed = ['firstName', 'lastName', 'phone', 'tags', 'listIds', 'isVip',
+                     'isSubscribed', 'emailStatus', 'company', 'location', 'notes'];
+    const updates = {};
+    allowed.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
+
+    const contact = await Contact.findOneAndUpdate(
+      { _id: req.params.id, orgId },
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).populate('listIds', 'name color');
+
+    if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
+    res.json({ success: true, data: contact });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── DELETE CONTACT ────────────────────────────────────────
+exports.deleteContact = async (req, res) => {
+  try {
+    const orgId   = toObjId(req.user.orgId);
+    const contact = await Contact.findOneAndDelete({ _id: req.params.id, orgId });
+    if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
+
+    if (contact.listIds.length) {
+      await ContactList.updateMany({ _id: { $in: contact.listIds } }, { $inc: { contactCount: -1 } });
+    }
+    res.json({ success: true, message: 'Contact deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── BULK DELETE ───────────────────────────────────────────
+exports.bulkDeleteContacts = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const { ids } = req.body;
+    if (!ids || !ids.length) return res.status(400).json({ success: false, message: 'No IDs provided' });
+    const result = await Contact.deleteMany({ _id: { $in: ids }, orgId });
+    res.json({ success: true, deleted: result.deletedCount });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── IMPORT CSV ────────────────────────────────────────────
+exports.importContacts = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const { contacts } = req.body;
+    if (!contacts || !contacts.length) {
+      return res.status(400).json({ success: false, message: 'No contacts provided' });
+    }
+    const docs = contacts.map(c => ({ ...c, orgId, source: 'csv', tags: c.tags || [], listIds: [] }));
+    const result = await Contact.insertMany(docs, { ordered: false });
+    res.json({ success: true, imported: result.length });
+  } catch (err) {
+    const inserted = err.result?.nInserted || 0;
+    const skipped  = err.writeErrors?.length || 0;
+    res.json({ success: true, imported: inserted, skipped, message: `${skipped} duplicates skipped` });
+  }
+};
+
+// ── EXPORT CSV ────────────────────────────────────────────
+exports.exportContacts = async (req, res) => {
+  try {
+    const orgId    = toObjId(req.user.orgId);
+    const contacts = await Contact.find({ orgId }).lean();
+    const header   = 'First Name,Last Name,Email,Phone,Tags,VIP,Email Status,Created\n';
+    const rows     = contacts.map(c =>
+      [c.firstName, c.lastName, c.email, c.phone,
+       (c.tags || []).join('|'), c.isVip ? 'Yes' : 'No',
+       c.emailStatus, new Date(c.createdAt).toLocaleDateString()].join(',')
+    ).join('\n');
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="contacts.csv"');
+    res.send(header + rows);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── TAGS ──────────────────────────────────────────────────
+exports.getTags = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const tags  = await Contact.distinct('tags', { orgId });
+    res.json({ success: true, data: tags.filter(Boolean).sort() });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── LISTS ─────────────────────────────────────────────────
+exports.getLists = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const lists = await ContactList.find({ orgId }).sort({ createdAt: -1 }).lean();
+    res.json({ success: true, data: lists });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.createList = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const { name, description, color } = req.body;
+    const list = await ContactList.create({ orgId, name, description, color });
+    res.status(201).json({ success: true, data: list });
+  } catch (err) {
+    if (err.code === 11000) return res.status(409).json({ success: false, message: 'List name already exists' });
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.deleteList = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    await ContactList.findOneAndDelete({ _id: req.params.id, orgId });
+    await Contact.updateMany({ orgId }, { $pull: { listIds: toObjId(req.params.id) } });
+    res.json({ success: true, message: 'List deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+3. routes/peopleRoutes.js
+js
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/peopleController');
+const auth    = require('../middleware/authMiddleware');
+
+router.use(auth);
+
+router.get   ('/summary',              ctrl.getSummary);
+router.get   ('/contacts',             ctrl.getContacts);
+router.get   ('/contacts/:id',         ctrl.getContact);
+router.post  ('/contacts',             ctrl.createContact);
+router.put   ('/contacts/:id',         ctrl.updateContact);
+router.delete('/contacts/:id',         ctrl.deleteContact);
+router.post  ('/contacts/bulk-delete', ctrl.bulkDeleteContacts);
+router.post  ('/import',               ctrl.importContacts);
+router.get   ('/export',               ctrl.exportContacts);
+router.get   ('/tags',                 ctrl.getTags);
+router.get   ('/lists',                ctrl.getLists);
+router.post  ('/lists',                ctrl.createList);
+router.delete('/lists/:id',            ctrl.deleteList);
+
+module.exports = router;
+4. seed/peopleSeed.js
+js
+require('dotenv').config();
+const mongoose    = require('mongoose');
+const Contact     = require('../models/Contact');
+const ContactList = require('../models/ContactList');
+
+const ORG_ID = new mongoose.Types.ObjectId('65f1a2b3c4d5e6f7a8b9c0d1');
+
+const LISTS = [
+  { name: 'Premium Buyers',     color: '#6366f1' },
+  { name: 'Newsletter Subs',    color: '#10b981' },
+  { name: 'Festival Attendees', color: '#f59e0b' },
+  { name: 'Cold Leads',         color: '#6b7280' },
+  { name: 'Re-engagement',      color: '#ef4444' },
+];
+
+const FIRST = ['Arun','Priya','Vikram','Meera','Ravi','Anjali','Karthik','Deepa','Suresh','Nisha','Arjun','Pooja','Rahul','Sneha','Gopal'];
+const LAST  = ['Jayaraj','Kumar','Sharma','Patel','Reddy','Nair','Iyer','Pillai','Menon','Rao','Gupta','Singh','Verma','Das','Joshi'];
+const TAGS  = ['VIP','Festival','Inactive','Premium','Trial','Enterprise','SMB'];
+const DOMAINS = ['gmail.com','yahoo.com','outlook.com','hotmail.com'];
+
+const rand    = arr => arr[Math.floor(Math.random() * arr.length)];
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+async function run() {
+  await mongoose.connect(process.env.MONGO_URI);
+  console.log('✅  Connected to MongoDB');
+
+  await Contact.deleteMany({ orgId: ORG_ID });
+  await ContactList.deleteMany({ orgId: ORG_ID });
+  console.log('🗑   Cleared Contact + ContactList');
+
+  const lists = await ContactList.insertMany(LISTS.map(l => ({ ...l, orgId: ORG_ID })));
+  console.log(`📋  Created ${lists.length} lists`);
+
+  const contacts = [];
+  for (let i = 0; i < 60; i++) {
+    const fn  = rand(FIRST);
+    const ln  = rand(LAST);
+    const email = `${fn.toLowerCase()}.${ln.toLowerCase()}${randInt(1,999)}@${rand(DOMAINS)}`;
+    const tags  = [...new Set(Array.from({ length: randInt(0,2) }, () => rand(TAGS)))];
+    const listIds = [...new Set(Array.from({ length: randInt(0,2) }, () => rand(lists)._id))];
+    const daysAgo = randInt(0, 60);
+
+    contacts.push({
+      orgId: ORG_ID, firstName: fn, lastName: ln, email, phone: `9${randInt(100000000,999999999)}`,
+      tags, listIds, isVip: tags.includes('VIP') || Math.random() < 0.1,
+      isSubscribed: Math.random() > 0.05,
+      emailStatus: Math.random() < 0.92 ? 'valid' : 'invalid',
+      avatarInitials: fn.charAt(0) + ln.charAt(0),
+      source: rand(['manual','csv','api']),
+      createdAt: new Date(Date.now() - daysAgo * 86400000),
+    });
+  }
+
+  await Contact.insertMany(contacts);
+  console.log(`📧  Created ${contacts.length} contacts`);
+
+  for (const list of lists) {
+    const count = await Contact.countDocuments({ orgId: ORG_ID, listIds: list._id });
+    await ContactList.findByIdAndUpdate(list._id, { contactCount: count });
+  }
+
+  console.log('✅  Seed complete!');
+  await mongoose.disconnect();
+}
+
+run().catch(err => { console.error(err); process.exit(1); });
+5. server.js — add these 2 lines
+js
+// At the top with other requires:
+const peopleRoutes = require('./routes/peopleRoutes');
+
+// With other app.use() lines:
+app.use('/api/people', peopleRoutes);
+Now the frontend files — paste these next:
+
+6. src/services/peopleService.js
+js
+import api from './api';
+
+export const fetchPeopleSummary = () =>
+  api.get('/people/summary').then(r => r.data.data);
+
+export const fetchContacts = (params = {}) =>
+  api.get('/people/contacts', { params }).then(r => r.data);
+
+export const fetchContact = (id) =>
+  api.get(`/people/contacts/${id}`).then(r => r.data.data);
+
+export const createContact = (payload) =>
+  api.post('/people/contacts', payload).then(r => r.data.data);
+
+export const updateContact = (id, payload) =>
+  api.put(`/people/contacts/${id}`, payload).then(r => r.data.data);
+
+export const deleteContact = (id) =>
+  api.delete(`/people/contacts/${id}`).then(r => r.data);
+
+export const bulkDeleteContacts = (ids) =>
+  api.post('/people/contacts/bulk-delete', { ids }).then(r => r.data);
+
+export const importContacts = (contacts) =>
+  api.post('/people/import', { contacts }).then(r => r.data);
+
+export const exportContacts = () => {
+  const token = localStorage.getItem('token');
+  const base  = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  window.location.href = `${base}/people/export?token=${token}`;
+};
+
+export const fetchTags = () =>
+  api.get('/people/tags').then(r => r.data.data);
+
+export const fetchLists = () =>
+  api.get('/people/lists').then(r => r.data.data);
+
+export const createList = (payload) =>
+  api.post('/people/lists', payload).then(r => r.data.data);
+
+export const deleteList = (id) =>
+  api.delete(`/people/lists/${id}`).then(r => r.data);
+7. src/components/people/PeopleSummaryCards.jsx
+jsx
+import React from 'react';
+
+const PeopleSummaryCards = ({ summary, loading }) => {
+  const cards = [
+    {
+      label: 'Total Contacts',
+      value: loading ? '—' : summary?.totalContacts?.toLocaleString() ?? '0',
+      sub: loading ? '' : `+${summary?.newThisMonth ?? 0} this month`,
+      subClass: 'text-success',
+      icon: (
+        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      ),
+    },
+    {
+      label: 'VIP Customers',
+      value: loading ? '—' : summary?.vipCount?.toLocaleString() ?? '0',
+      sub: loading || !summary ? '' :
+        `${summary.totalContacts ? Math.round((summary.vipCount / summary.totalContacts) * 100) : 0}% of total base`,
+      subClass: 'text-muted',
+      icon: (
+        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      ),
+    },
+    {
+      label: 'Lists Created',
+      value: loading ? '—' : summary?.listCount ?? '0',
+      sub: 'Active segments',
+      subClass: 'text-muted',
+      icon: (
+        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+      ),
+    },
+    {
+      label: 'Valid Emails',
+      value: loading ? '—' : `${summary?.validEmailRate ?? 0}%`,
+      sub: 'High deliverability',
+      subClass: 'text-success',
+      icon: (
+        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <div className="summary-cards-grid">
+      {cards.map((card) => (
+        <div key={card.label} className="scard">
+          <div className="scard-body">
+            <div>
+              <div className="scard-label">{card.label}</div>
+              <div className="scard-value">{card.value}</div>
+              <div className={`scard-sub ${card.subClass}`}>{card.sub}</div>
+            </div>
+            <div className="scard-icon">{card.icon}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default PeopleSummaryCards;
+8. src/components/people/ContactTable.jsx
+jsx
+import React from 'react';
+
+const TABS = [
+  { key: 'all',    label: 'All' },
+  { key: 'tagged', label: 'Tagged' },
+  { key: 'lists',  label: 'Lists' },
+  { key: 'recent', label: 'Recent' },
+];
+
+const ContactTable = ({ contacts, loading, pagination, tab, onTabChange, onEdit, onDelete, selected, onSelectToggle, onSelectAll, onPageChange }) => {
+  const allSelected = contacts.length > 0 && contacts.every(c => selected.includes(c._id));
+
+  const formatDate = (iso) =>
+    new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  const avatarColor = (initials) => {
+    const colors = ['#6366f1','#10b981','#f59e0b','#ef4444','#3b82f6','#8b5cf6'];
+    return colors[(initials?.charCodeAt(0) || 0) % colors.length];
+  };
+
+  return (
+    <div className="table-box">
+      <div className="tabs" style={{ borderBottom: '1px solid var(--border)', marginBottom: 0, paddingLeft: 20 }}>
+        {TABS.map(t => (
+          <button key={t.key} className={`tab-btn ${tab === t.key ? 'active' : ''}`} onClick={() => onTabChange(t.key)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr className="trow trow-head">
+            <th style={{ width: 40, padding: '12px 16px' }}>
+              <input type="checkbox" checked={allSelected} onChange={() => onSelectAll(allSelected ? [] : contacts.map(c => c._id))} />
+            </th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Tags</th>
+            <th>Lists</th>
+            <th>Created</th>
+            <th style={{ textAlign: 'right', paddingRight: 20 }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>Loading contacts…</td></tr>
+          ) : contacts.length === 0 ? (
+            <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>No contacts found</td></tr>
+          ) : contacts.map(contact => (
+            <tr key={contact._id} className="trow" style={{ backgroundColor: selected.includes(contact._id) ? 'var(--hover-bg,#f9fafb)' : '' }}>
+              <td style={{ padding: '12px 16px' }}>
+                <input type="checkbox" checked={selected.includes(contact._id)} onChange={() => onSelectToggle(contact._id)} />
+              </td>
+              <td>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 34, height: 34, borderRadius: '50%', background: avatarColor(contact.avatarInitials), color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, flexShrink: 0 }}>
+                    {contact.avatarInitials || '?'}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 500 }}>{contact.firstName} {contact.lastName}</div>
+                    {contact.isVip && <span style={{ fontSize: 10, background: '#fef3c7', color: '#92400e', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>VIP</span>}
+                  </div>
+                </div>
+              </td>
+              <td style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
+                {contact.email}
+                {contact.emailStatus === 'invalid' && <span style={{ marginLeft: 6, color: '#ef4444', fontSize: 11 }}>✗ invalid</span>}
+              </td>
+              <td style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{contact.phone || '—'}</td>
+              <td>
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                  {(contact.tags || []).map(tag => <span key={tag} className="badge badge-tag">{tag}</span>)}
+                  {!contact.tags?.length && <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>—</span>}
+                </div>
+              </td>
+              <td>
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                  {(contact.listIds || []).map(list => <span key={list._id || list} className="badge badge-list">{list.name || list}</span>)}
+                  {!contact.listIds?.length && <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>—</span>}
+                </div>
+              </td>
+              <td style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{formatDate(contact.createdAt)}</td>
+              <td style={{ textAlign: 'right', paddingRight: 16 }}>
+                <button className="icon-btn" onClick={() => onEdit(contact)} title="Edit">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button className="icon-btn icon-btn-danger" onClick={() => onDelete(contact)} title="Delete">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                    <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {pagination && pagination.pages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 20px', borderTop: '1px solid var(--border)' }}>
+          <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Showing {contacts.length} of {pagination.total} contacts</span>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <button className="btn btn-sm" disabled={pagination.page <= 1} onClick={() => onPageChange(pagination.page - 1)}>← Prev</button>
+            <span style={{ fontSize: 13, padding: '4px 8px' }}>{pagination.page} / {pagination.pages}</span>
+            <button className="btn btn-sm" disabled={pagination.page >= pagination.pages} onClick={() => onPageChange(pagination.page + 1)}>Next →</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ContactTable;
+9. src/components/people/AddContactModal.jsx
+jsx
+import React, { useState, useEffect } from 'react';
+
+const EMPTY = { firstName: '', lastName: '', email: '', phone: '', isVip: false, tags: '', company: '', location: '', notes: '', listIds: [] };
+
+const AddContactModal = ({ isOpen, onClose, onSave, contact, lists = [] }) => {
+  const [form, setForm]     = useState(EMPTY);
+  const [saving, setSaving] = useState(false);
+  const [error, setError]   = useState('');
+
+  useEffect(() => {
+    if (contact) {
+      setForm({ firstName: contact.firstName || '', lastName: contact.lastName || '', email: contact.email || '', phone: contact.phone || '', isVip: contact.isVip || false, tags: (contact.tags || []).join(', '), company: contact.company || '', location: contact.location || '', notes: contact.notes || '', listIds: (contact.listIds || []).map(l => l._id || l) });
+    } else { setForm(EMPTY); }
+    setError('');
+  }, [contact, isOpen]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const toggleList = (id) => {
+    setForm(prev => ({ ...prev, listIds: prev.listIds.includes(id) ? prev.listIds.filter(l => l !== id) : [...prev.listIds, id] }));
+  };
+
+  const handleSubmit = async () => {
+    if (!form.firstName.trim() || !form.email.trim()) { setError('First name and email are required'); return; }
+    setSaving(true); setError('');
+    try {
+      await onSave({ ...form, tags: form.tags.split(',').map(t => t.trim()).filter(Boolean) });
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to save contact');
+    } finally { setSaving(false); }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 540 }}>
+        <div className="modal-header">
+          <h3>{contact ? 'Edit Contact' : 'Add Contact'}</h3>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          {error && <div className="alert alert-error" style={{ marginBottom: 16 }}>{error}</div>}
+          <div className="form-row">
+            <div className="form-group">
+              <label>First Name *</label>
+              <input className="form-input" name="firstName" value={form.firstName} onChange={handleChange} placeholder="Arun" />
+            </div>
+            <div className="form-group">
+              <label>Last Name</label>
+              <input className="form-input" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Jayaraj" />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Email *</label>
+            <input className="form-input" name="email" type="email" value={form.email} onChange={handleChange} placeholder="arun@gmail.com" disabled={!!contact} />
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Phone</label>
+              <input className="form-input" name="phone" value={form.phone} onChange={handleChange} placeholder="9876543210" />
+            </div>
+            <div className="form-group">
+              <label>Company</label>
+              <input className="form-input" name="company" value={form.company} onChange={handleChange} placeholder="Acme Inc." />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Tags <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>(comma separated)</span></label>
+            <input className="form-input" name="tags" value={form.tags} onChange={handleChange} placeholder="VIP, Festival, Premium" />
+          </div>
+          {lists.length > 0 && (
+            <div className="form-group">
+              <label>Add to Lists</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
+                {lists.map(list => (
+                  <button key={list._id} type="button" onClick={() => toggleList(list._id)}
+                    style={{ padding: '4px 12px', borderRadius: 6, fontSize: 13, cursor: 'pointer', border: `1.5px solid ${form.listIds.includes(list._id) ? list.color : 'var(--border)'}`, background: form.listIds.includes(list._id) ? list.color + '18' : 'transparent', color: form.listIds.includes(list._id) ? list.color : 'var(--text-secondary)', fontWeight: form.listIds.includes(list._id) ? 600 : 400 }}>
+                    {list.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="form-group">
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+              <input type="checkbox" name="isVip" checked={form.isVip} onChange={handleChange} />
+              Mark as VIP customer
+            </label>
+          </div>
+          <div className="form-group">
+            <label>Notes</label>
+            <textarea className="form-input" name="notes" value={form.notes} onChange={handleChange} rows={2} placeholder="Optional notes…" />
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-ghost" onClick={onClose} disabled={saving}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleSubmit} disabled={saving}>
+            {saving ? 'Saving…' : contact ? 'Save Changes' : 'Add Contact'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddContactModal;
+10. src/components/people/CreateListModal.jsx
+jsx
+import React, { useState } from 'react';
+
+const COLORS = ['#6366f1','#10b981','#f59e0b','#ef4444','#3b82f6','#8b5cf6','#ec4899','#06b6d4'];
+
+const CreateListModal = ({ isOpen, onClose, onSave }) => {
+  const [name, setName]     = useState('');
+  const [desc, setDesc]     = useState('');
+  const [color, setColor]   = useState(COLORS[0]);
+  const [saving, setSaving] = useState(false);
+  const [error, setError]   = useState('');
+
+  const handleSave = async () => {
+    if (!name.trim()) { setError('List name is required'); return; }
+    setSaving(true); setError('');
+    try {
+      await onSave({ name: name.trim(), description: desc.trim(), color });
+      setName(''); setDesc(''); setColor(COLORS[0]);
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to create list');
+    } finally { setSaving(false); }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 420 }}>
+        <div className="modal-header">
+          <h3>Create List</h3>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          {error && <div className="alert alert-error" style={{ marginBottom: 12 }}>{error}</div>}
+          <div className="form-group">
+            <label>List Name *</label>
+            <input className="form-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Premium Buyers" />
+          </div>
+          <div className="form-group">
+            <label>Description</label>
+            <input className="form-input" value={desc} onChange={e => setDesc(e.target.value)} placeholder="Optional description" />
+          </div>
+          <div className="form-group">
+            <label>Color</label>
+            <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+              {COLORS.map(c => (
+                <button key={c} type="button" onClick={() => setColor(c)}
+                  style={{ width: 28, height: 28, borderRadius: '50%', background: c, border: 'none', cursor: 'pointer', outline: color === c ? `2.5px solid ${c}` : 'none', outlineOffset: 2 }} />
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-ghost" onClick={onClose} disabled={saving}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
+            {saving ? 'Creating…' : 'Create List'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreateListModal;
+11. src/components/people/ImportCSVModal.jsx
+jsx
+import React, { useState, useRef } from 'react';
+
+const ImportCSVModal = ({ isOpen, onClose, onImport }) => {
+  const fileRef               = useRef();
+  const [preview, setPreview] = useState([]);
+  const [parsed, setParsed]   = useState([]);
+  const [importing, setImporting] = useState(false);
+  const [result, setResult]   = useState(null);
+  const [error, setError]     = useState('');
+
+  const parseCSV = (text) => {
+    const lines   = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/\s/g,''));
+    return lines.slice(1).map(line => {
+      const vals = line.split(',');
+      const obj  = {};
+      headers.forEach((h, i) => { obj[h] = (vals[i] || '').trim(); });
+      return { firstName: obj.firstname || '', lastName: obj.lastname || '', email: obj.email || '', phone: obj.phone || '', tags: obj.tags ? obj.tags.split('|').map(t => t.trim()).filter(Boolean) : [] };
+    }).filter(r => r.email);
+  };
+
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setResult(null); setError('');
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try { const rows = parseCSV(evt.target.result); setParsed(rows); setPreview(rows.slice(0,5)); }
+      catch { setError('Could not parse CSV. Make sure it has headers: firstName, lastName, email, phone, tags'); }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleImport = async () => {
+    if (!parsed.length) return;
+    setImporting(true); setError('');
+    try { const res = await onImport(parsed); setResult(res); }
+    catch (err) { setError(err.response?.data?.message || 'Import failed'); }
+    finally { setImporting(false); }
+  };
+
+  const handleClose = () => { setParsed([]); setPreview([]); setResult(null); setError(''); onClose(); };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={handleClose}>
+      <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 560 }}>
+        <div className="modal-header">
+          <h3>Import CSV</h3>
+          <button className="modal-close" onClick={handleClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <div style={{ border: '1.5px dashed var(--border)', borderRadius: 8, padding: 24, textAlign: 'center', cursor: 'pointer', marginBottom: 16 }} onClick={() => fileRef.current?.click()}>
+            <input ref={fileRef} type="file" accept=".csv" style={{ display: 'none' }} onChange={handleFile} />
+            <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>Click to select a <strong>.csv</strong> file</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Columns: firstName, lastName, email, phone, tags (pipe-separated)</div>
+          </div>
+          {error && <div className="alert alert-error" style={{ marginBottom: 12 }}>{error}</div>}
+          {preview.length > 0 && !result && (
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Preview ({parsed.length} contacts found)</div>
+              <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
+                <thead><tr style={{ background: 'var(--bg-secondary)' }}>
+                  {['Name','Email','Phone','Tags'].map(h => <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 600 }}>{h}</th>)}
+                </tr></thead>
+                <tbody>
+                  {preview.map((r,i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '6px 8px' }}>{r.firstName} {r.lastName}</td>
+                      <td style={{ padding: '6px 8px' }}>{r.email}</td>
+                      <td style={{ padding: '6px 8px' }}>{r.phone}</td>
+                      <td style={{ padding: '6px 8px' }}>{r.tags.join(', ')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {parsed.length > 5 && <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>…and {parsed.length - 5} more</div>}
+            </div>
+          )}
+          {result && <div className="alert alert-success">✅ Imported <strong>{result.imported}</strong> contacts.{result.skipped > 0 && ` ${result.skipped} duplicates skipped.`}</div>}
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-ghost" onClick={handleClose}>{result ? 'Close' : 'Cancel'}</button>
+          {!result && <button className="btn btn-primary" onClick={handleImport} disabled={!parsed.length || importing}>{importing ? 'Importing…' : `Import ${parsed.length || ''} Contacts`}</button>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ImportCSVModal;
+12. src/pages/PeoplePage.jsx
+jsx
+import React, { useState, useEffect, useCallback } from 'react';
+import '../people.css';
+import PeopleSummaryCards from '../components/people/PeopleSummaryCards';
+import ContactTable       from '../components/people/ContactTable';
+import AddContactModal    from '../components/people/AddContactModal';
+import CreateListModal    from '../components/people/CreateListModal';
+import ImportCSVModal     from '../components/people/ImportCSVModal';
+import { fetchPeopleSummary, fetchContacts, createContact, updateContact, deleteContact, bulkDeleteContacts, importContacts, exportContacts, fetchLists, createList } from '../services/peopleService';
+
+const PeoplePage = () => {
+  const [summary, setSummary]       = useState(null);
+  const [contacts, setContacts]     = useState([]);
+  const [lists, setLists]           = useState([]);
+  const [pagination, setPagination] = useState(null);
+  const [tab, setTab]               = useState('all');
+  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch]         = useState('');
+  const [page, setPage]             = useState(1);
+  const [loading, setLoading]       = useState(false);
+  const [selected, setSelected]     = useState([]);
+  const [addModal, setAddModal]     = useState(false);
+  const [editContact, setEditContact] = useState(null);
+  const [listModal, setListModal]   = useState(false);
+  const [importModal, setImportModal] = useState(false);
+
+  const loadContacts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetchContacts({ page, tab, search: search || undefined, limit: 15 });
+      setContacts(res.data || []);
+      setPagination(res.pagination);
+    } catch (err) { console.error(err); }
+    finally { setLoading(false); }
+  }, [page, tab, search]);
+
+  const loadSummary = useCallback(async () => {
+    try { setSummary(await fetchPeopleSummary()); } catch (err) { console.error(err); }
+  }, []);
+
+  const loadLists = useCallback(async () => {
+    try { setLists(await fetchLists() || []); } catch (err) { console.error(err); }
+  }, []);
+
+  useEffect(() => { loadSummary(); loadLists(); }, [loadSummary, loadLists]);
+  useEffect(() => { loadContacts(); setSelected([]); }, [loadContacts]);
+  useEffect(() => {
+    const t = setTimeout(() => { setSearch(searchInput); setPage(1); }, 400);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  const handleAdd    = async (p) => { await createContact(p);           loadContacts(); loadSummary(); };
+  const handleEdit   = async (p) => { await updateContact(editContact._id, p); loadContacts(); loadSummary(); };
+  const handleDelete = async (c) => {
+    if (!window.confirm(`Delete ${c.firstName} ${c.lastName}?`)) return;
+    await deleteContact(c._id); loadContacts(); loadSummary();
+  };
+  const handleBulkDelete = async () => {
+    if (!selected.length || !window.confirm(`Delete ${selected.length} contacts?`)) return;
+    await bulkDeleteContacts(selected); setSelected([]); loadContacts(); loadSummary();
+  };
+  const handleCreateList = async (p) => { await createList(p); loadLists(); loadSummary(); };
+  const handleImport     = async (rows) => { const r = await importContacts(rows); loadContacts(); loadSummary(); return r; };
+
+  return (
+    <div className="page-container">
+      <div className="page-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <h1 className="page-title">People</h1>
+          <input className="search-input" placeholder="Search contacts…" value={searchInput} onChange={e => setSearchInput(e.target.value)} style={{ width: 260 }} />
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button className="btn btn-outline" onClick={exportContacts}>
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ marginRight: 6 }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button className="btn btn-primary" onClick={() => setAddModal(true)}>
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" style={{ marginRight: 6 }}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Contact
+          </button>
+        </div>
+      </div>
+
+      <PeopleSummaryCards summary={summary} loading={!summary} />
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '20px 0 12px' }}>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button className="btn btn-outline btn-sm" onClick={() => setListModal(true)}>+ Create List</button>
+          <button className="btn btn-outline btn-sm" onClick={() => setImportModal(true)}>↑ Import CSV</button>
+          {selected.length > 0 && <button className="btn btn-danger btn-sm" onClick={handleBulkDelete}>Delete {selected.length} selected</button>}
+        </div>
+        <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Selected: {selected.length} contacts</span>
+      </div>
+
+      <div className="section-title" style={{ marginBottom: 12 }}>All Contacts</div>
+
+      <ContactTable
+        contacts={contacts} loading={loading} pagination={pagination} tab={tab}
+        onTabChange={(t) => { setTab(t); setPage(1); }}
+        onEdit={(c) => { setEditContact(c); setAddModal(true); }}
+        onDelete={handleDelete} selected={selected}
+        onSelectToggle={(id) => setSelected(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])}
+        onSelectAll={setSelected} onPageChange={setPage}
+      />
+
+      <AddContactModal isOpen={addModal} contact={editContact} lists={lists}
+        onClose={() => { setAddModal(false); setEditContact(null); }}
+        onSave={editContact ? handleEdit : handleAdd} />
+      <CreateListModal isOpen={listModal} onClose={() => setListModal(false)} onSave={handleCreateList} />
+      <ImportCSVModal  isOpen={importModal} onClose={() => setImportModal(false)} onImport={handleImport} />
+    </div>
+  );
+};
+
+export default PeoplePage;
+13. src/people.css — create this new file
+Paste the full CSS from the zip file's people.css. It contains all styles for .summary-cards-grid, .badge, .modal-overlay, .form-input, .tab-btn, .icon-btn etc.
+
+14. Update App.jsx — add these 2 things
+jsx
+// Add import at top:
+import PeoplePage from './pages/PeoplePage';
+
+// Add route inside <Routes>:
+<Route path="/people" element={<PeoplePage />} />
+After all files are pasted, run:
+
+powershell
+# Backend terminal
+cd D:\prova\ProvaCampaign_BE
+node seed/peopleSeed.js
+Then go to http://localhost:5173/people ✅
+
+You said: now the report module we can do modify it like the upper email send , open rate click rate ,bounce rate , unscribe rate it be same .
+now the report module we can do modify it like the upper email send , open rate click rate ,bounce rate , unscribe rate it be same .opens vs clicks can be remove and then campaign performace in the top of the screen comes it next delete the recent activity .and then pie chart shows the the campaign performance like progress, schdule, completed like that will shows.after that the open over time will shows in time series method . and then in campaign performance know in there i can select particular campaign means the next screen shows the in the particular campaign the diffferent cards it shows the history like that whhich are progress, completed like that pluw click rate like also it be easily to identity and understand perpesfectivity .like that all campagin performance in .and then when i can comes the report module as that time the api can call and the dats are comes the repert process it be distrit loop and agagin again the process is very hard so change that you can decide the which is good like that example when the campaign send the email mean it be count or comes to the report loop like that you can research which is good to implement it
+
+Show more
+16:54
+Claude responded: Let me fully understand your requirements before building.
+Let me fully understand your requirements before building. Let me re-read carefully.
+
+Now let me build everything. This is a big redesign — let me plan it clearly first:
+
+Your requirements:
+
+Keep top summary cards (Sent, Open Rate, Click Rate, Bounce Rate, Unsubscribe Rate)
+Remove "Opens vs Clicks" chart
+Move Campaign Performance table to top (after cards)
+Add Pie chart — campaign status (In Progress / Scheduled / Completed)
+Add Opens Over Time line chart (time series)
+Campaign row click → drill-down screen with per-campaign cards + history
+Fix the API loop problem — use event-driven aggregation (pre-compute stats when email is sent, not on every page load)
+
+Complete redesigned Reports module - all files
+Complete redesigned Reports module - all files
+First, let me show you the new layout visually, then give all the code:
+
+V
+
+Connecting to visualize...
+Good — that's the exact layout. Now here's the API strategy fix first, then all the code:
+
+The API Loop Problem — Fix
+Current (bad): Every time Reports page loads → runs heavy aggregation across ALL events → slow, hammers DB.
+
+New (event-driven): Campaign stats are pre-computed and stored on the Campaign document itself. When an email is sent/opened/clicked/bounced → update the counter instantly. Reports page just reads those numbers — no aggregation at all.
+
+Now all the code:
+
+Backend
+1. Update models/Campaign.js — add stats fields
+Add these fields to your existing Campaign schema:
+
+js
+// Add inside your existing campaignSchema fields:
+stats: {
+  totalSent:        { type: Number, default: 0 },
+  totalDelivered:   { type: Number, default: 0 },
+  totalBounced:     { type: Number, default: 0 },
+  totalOpens:       { type: Number, default: 0 },
+  totalClicks:      { type: Number, default: 0 },
+  totalUnsubscribes:{ type: Number, default: 0 },
+  openRate:         { type: Number, default: 0 },
+  clickRate:        { type: Number, default: 0 },
+  bounceRate:       { type: Number, default: 0 },
+  unsubscribeRate:  { type: Number, default: 0 },
+  lastEventAt:      { type: Date },
+},
+2. New services/statsService.js — recompute a campaign's stats
+Create ProvaCampaign_BE/services/statsService.js:
+
+js
+/**
+ * statsService.js
+ * Called whenever an email event occurs (send, open, click, bounce).
+ * Recomputes stats for ONE campaign and writes them back to Campaign.stats.
+ * This keeps Reports fast — no aggregation on page load.
+ */
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+/**
+ * recomputeCampaignStats(campaignId)
+ * Runs lightweight queries on EmailLog + Event for one campaign only.
+ * Call this after any tracking event fires.
+ */
+exports.recomputeCampaignStats = async (campaignId) => {
+  const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+    EmailLog.countDocuments({ campaignId }),
+    Event.countDocuments({ campaignId, type: 'open',        isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'click',       isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'bounce' }),
+    Event.countDocuments({ campaignId, type: 'unsubscribe' }),
+  ]);
+
+  const delivered = logs - bounces;
+  const base      = delivered || 1; // avoid divide-by-zero
+
+  const stats = {
+    totalSent:         logs,
+    totalDelivered:    delivered,
+    totalBounced:      bounces,
+    totalOpens:        opens,
+    totalClicks:       clicks,
+    totalUnsubscribes: unsubs,
+    openRate:          Math.round((opens   / base) * 1000) / 10,
+    clickRate:         Math.round((clicks  / base) * 1000) / 10,
+    bounceRate:        Math.round((bounces / (logs || 1)) * 1000) / 10,
+    unsubscribeRate:   Math.round((unsubs  / base) * 1000) / 10,
+    lastEventAt:       new Date(),
+  };
+
+  await Campaign.findByIdAndUpdate(campaignId, { $set: { stats } });
+  return stats;
+};
+3. Update controllers/trackingController.js — call statsService after every event
+At the bottom of your recordOpen and recordClick functions, add:
+
+js
+const { recomputeCampaignStats } = require('../services/statsService');
+
+// Inside trackOpen, after saving the Event:
+recomputeCampaignStats(emailLog.campaignId).catch(console.error); // fire-and-forget
+
+// Inside trackClick, after saving the Event:
+recomputeCampaignStats(emailLog.campaignId).catch(console.error);
+4. Replace controllers/reportController.js — simplified, fast
+js
+const Campaign = require('../models/Campaign');
+const Event    = require('../models/Event');
+const mongoose = require('mongoose');
+
+const toObjId = (id) => new mongoose.Types.ObjectId(id);
+
+// ── SUMMARY ──────────────────────────────────────────────────────────────────
+// Reads pre-computed stats from Campaign.stats — NO aggregation
+exports.getSummary = async (req, res) => {
+  try {
+    const orgId     = toObjId(req.user.orgId);
+    const campaigns = await Campaign.find({ orgId, 'stats.totalSent': { $gt: 0 } })
+      .select('stats').lean();
+
+    const totals = campaigns.reduce((acc, c) => {
+      acc.sent        += c.stats.totalSent        || 0;
+      acc.delivered   += c.stats.totalDelivered   || 0;
+      acc.opens       += c.stats.totalOpens       || 0;
+      acc.clicks      += c.stats.totalClicks      || 0;
+      acc.bounces     += c.stats.totalBounced     || 0;
+      acc.unsubs      += c.stats.totalUnsubscribes|| 0;
+      return acc;
+    }, { sent: 0, delivered: 0, opens: 0, clicks: 0, bounces: 0, unsubs: 0 });
+
+    const base = totals.delivered || 1;
+
+    res.json({
+      success: true,
+      data: {
+        totalSent:        totals.sent,
+        totalDelivered:   totals.delivered,
+        openRate:         Math.round((totals.opens   / base) * 1000) / 10,
+        clickRate:        Math.round((totals.clicks  / base) * 1000) / 10,
+        bounceRate:       Math.round((totals.bounces / (totals.sent || 1)) * 1000) / 10,
+        unsubscribeRate:  Math.round((totals.unsubs  / base) * 1000) / 10,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── CAMPAIGN TABLE ────────────────────────────────────────────────────────────
+// Returns all campaigns with their pre-computed stats
+exports.getCampaigns = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const { page = 1, limit = 10, status } = req.query;
+
+    const match = { orgId };
+    if (status) match.status = status;
+
+    const skip     = (Number(page) - 1) * Number(limit);
+    const total    = await Campaign.countDocuments(match);
+    const campaigns = await Campaign.find(match)
+      .select('name status stats createdAt scheduledAt sentAt')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    res.json({
+      success: true,
+      data: campaigns,
+      pagination: { page: Number(page), total, pages: Math.ceil(total / Number(limit)) },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── CAMPAIGN STATUS PIE ───────────────────────────────────────────────────────
+exports.getCampaignStatusBreakdown = async (req, res) => {
+  try {
+    const orgId = toObjId(req.user.orgId);
+    const breakdown = await Campaign.aggregate([
+      { $match: { orgId } },
+      { $group: { _id: '$status', count: { $sum: 1 } } },
+    ]);
+    res.json({ success: true, data: breakdown });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── OPENS OVER TIME ───────────────────────────────────────────────────────────
+exports.getOpensOverTime = async (req, res) => {
+  try {
+    const orgId  = toObjId(req.user.orgId);
+    const days   = Number(req.query.days || 30);
+    const from   = new Date(Date.now() - days * 86400000);
+
+    const data = await Event.aggregate([
+      { $match: { orgId, type: 'open', isFirstOccurrence: true, occurredAt: { $gte: from } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$occurredAt' } },
+          opens: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+      { $project: { date: '$_id', opens: 1, _id: 0 } },
+    ]);
+
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── SINGLE CAMPAIGN DRILL-DOWN ────────────────────────────────────────────────
+exports.getCampaignDetail = async (req, res) => {
+  try {
+    const orgId    = toObjId(req.user.orgId);
+    const campaign = await Campaign.findOne({ _id: req.params.id, orgId }).lean();
+    if (!campaign) return res.status(404).json({ success: false, message: 'Campaign not found' });
+
+    // Recipient-level history from EmailLog + Events
+    const EmailLog = require('../models/EmailLog');
+    const logs = await EmailLog.find({ campaignId: campaign._id })
+      .populate('contactId', 'email firstName lastName')
+      .lean();
+
+    // Get all events for this campaign
+    const events = await Event.find({ campaignId: campaign._id }).lean();
+    const eventMap = {};
+    events.forEach(e => {
+      const key = e.contactId?.toString();
+      if (!eventMap[key]) eventMap[key] = { opened: false, clicked: false, bounced: false, unsubscribed: false };
+      if (e.type === 'open')        eventMap[key].opened      = true;
+      if (e.type === 'click')       eventMap[key].clicked     = true;
+      if (e.type === 'bounce')      eventMap[key].bounced     = true;
+      if (e.type === 'unsubscribe') eventMap[key].unsubscribed= true;
+    });
+
+    const history = logs.map(log => {
+      const contactId = log.contactId?._id?.toString() || '';
+      const ev = eventMap[contactId] || {};
+      return {
+        email:        log.contactId?.email || log.email || '—',
+        name:         log.contactId ? `${log.contactId.firstName} ${log.contactId.lastName}`.trim() : '—',
+        status:       log.status || 'sent',
+        opened:       ev.opened      || false,
+        clicked:      ev.clicked     || false,
+        bounced:      ev.bounced     || false,
+        unsubscribed: ev.unsubscribed|| false,
+        sentAt:       log.createdAt,
+      };
+    });
+
+    res.json({
+      success: true,
+      data: {
+        campaign,
+        stats:   campaign.stats || {},
+        history,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+5. Update routes/reportRoutes.js
+js
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/reportController');
+const auth    = require('../middleware/authMiddleware');
+
+router.use(auth);
+
+router.get('/summary',          ctrl.getSummary);
+router.get('/campaigns',        ctrl.getCampaigns);
+router.get('/campaigns/:id',    ctrl.getCampaignDetail);
+router.get('/status-breakdown', ctrl.getCampaignStatusBreakdown);
+router.get('/opens-over-time',  ctrl.getOpensOverTime);
+
+module.exports = router;
+6. Update seed/reportSeed.js — compute stats after seeding
+At the bottom of your existing reportSeed.js, after creating events, add:
+
+js
+// After all events are created, compute stats for each campaign
+const { recomputeCampaignStats } = require('../services/statsService');
+for (const campaign of campaigns) {
+  await recomputeCampaignStats(campaign._id);
+}
+console.log('📊  Campaign stats computed');
+Frontend
+7. Update src/services/reportService.js
+js
+import api from './api';
+
+export const fetchSummary = () =>
+  api.get('/reports/summary').then(r => r.data.data);
+
+export const fetchCampaigns = (params = {}) =>
+  api.get('/reports/campaigns', { params }).then(r => r.data);
+
+export const fetchCampaignDetail = (id) =>
+  api.get(`/reports/campaigns/${id}`).then(r => r.data.data);
+
+export const fetchStatusBreakdown = () =>
+  api.get('/reports/status-breakdown').then(r => r.data.data);
+
+export const fetchOpensOverTime = (days = 30) =>
+  api.get('/reports/opens-over-time', { params: { days } }).then(r => r.data.data);
+8. Replace src/components/reports/ReportSummaryCards.jsx
+jsx
+import React from 'react';
+
+const CARDS = [
+  { key: 'totalSent',       label: 'Emails Sent',      format: v => v?.toLocaleString() },
+  { key: 'openRate',        label: 'Open Rate',         format: v => `${v}%` },
+  { key: 'clickRate',       label: 'Click Rate (CTR)',  format: v => `${v}%` },
+  { key: 'bounceRate',      label: 'Bounce Rate',       format: v => `${v}%` },
+  { key: 'unsubscribeRate', label: 'Unsubscribe Rate',  format: v => `${v}%` },
+];
+
+const ReportSummaryCards = ({ summary, loading }) => (
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14, marginBottom: 24 }}>
+    {CARDS.map(card => (
+      <div key={card.key} className="scard">
+        <div className="scard-label">{card.label}</div>
+        <div className="scard-value">
+          {loading ? '—' : card.format(summary?.[card.key] ?? 0)}
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+export default ReportSummaryCards;
+9. Replace src/components/reports/ReportCampaignTable.jsx
+jsx
+import React from 'react';
+
+const STATUS_STYLE = {
+  sent:        { bg: '#f0fdf4', color: '#16a34a', label: 'Completed' },
+  completed:   { bg: '#f0fdf4', color: '#16a34a', label: 'Completed' },
+  in_progress: { bg: '#eff6ff', color: '#2563eb', label: 'In Progress' },
+  active:      { bg: '#eff6ff', color: '#2563eb', label: 'In Progress' },
+  scheduled:   { bg: '#fffbeb', color: '#d97706', label: 'Scheduled' },
+  draft:       { bg: '#f9fafb', color: '#6b7280', label: 'Draft' },
+};
+
+const StatusBadge = ({ status }) => {
+  const s = STATUS_STYLE[status] || STATUS_STYLE.draft;
+  return (
+    <span style={{ background: s.bg, color: s.color, padding: '2px 10px', borderRadius: 12, fontSize: 12, fontWeight: 500 }}>
+      {s.label}
+    </span>
+  );
+};
+
+const ReportCampaignTable = ({ campaigns, loading, pagination, onSelect, onPageChange }) => {
+  const formatDate = (iso) => iso ? new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+
+  return (
+    <div className="table-box" style={{ marginBottom: 24 }}>
+      <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid var(--border)' }}>
+        <span style={{ fontWeight: 600, fontSize: 15 }}>Campaign Performance</span>
+      </div>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ background: 'var(--bg-secondary, #f9fafb)' }}>
+            {['Campaign', 'Status', 'Sent', 'Open Rate', 'Click Rate', 'Date', ''].map(h => (
+              <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr><td colSpan={7} style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>Loading…</td></tr>
+          ) : campaigns.length === 0 ? (
+            <tr><td colSpan={7} style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>No campaigns found</td></tr>
+          ) : campaigns.map(c => (
+            <tr key={c._id} onClick={() => onSelect(c._id)}
+              style={{ borderBottom: '1px solid var(--border, #f0f0f0)', cursor: 'pointer', transition: 'background 0.12s' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg, #f9fafb)'}
+              onMouseLeave={e => e.currentTarget.style.background = ''}>
+              <td style={{ padding: '13px 16px', fontWeight: 500 }}>{c.name}</td>
+              <td style={{ padding: '13px 16px' }}><StatusBadge status={c.status} /></td>
+              <td style={{ padding: '13px 16px', color: 'var(--text-secondary)' }}>{c.stats?.totalSent?.toLocaleString() || '—'}</td>
+              <td style={{ padding: '13px 16px', color: 'var(--text-secondary)' }}>{c.stats?.openRate != null ? `${c.stats.openRate}%` : '—'}</td>
+              <td style={{ padding: '13px 16px', color: 'var(--text-secondary)' }}>{c.stats?.clickRate != null ? `${c.stats.clickRate}%` : '—'}</td>
+              <td style={{ padding: '13px 16px', color: 'var(--text-secondary)', fontSize: 13 }}>{formatDate(c.sentAt || c.createdAt)}</td>
+              <td style={{ padding: '13px 16px', color: 'var(--text-muted)' }}>›</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {pagination?.pages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, padding: '10px 16px', borderTop: '1px solid var(--border)' }}>
+          <button className="btn btn-sm" disabled={pagination.page <= 1} onClick={() => onPageChange(pagination.page - 1)}>← Prev</button>
+          <span style={{ fontSize: 13, padding: '4px 8px' }}>{pagination.page} / {pagination.pages}</span>
+          <button className="btn btn-sm" disabled={pagination.page >= pagination.pages} onClick={() => onPageChange(pagination.page + 1)}>Next →</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ReportCampaignTable;
+10. New src/components/reports/StatusPieChart.jsx
+jsx
+import React from 'react';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const STATUS_COLORS = {
+  sent:        '#16a34a',
+  completed:   '#16a34a',
+  in_progress: '#2563eb',
+  active:      '#2563eb',
+  scheduled:   '#d97706',
+  draft:       '#6b7280',
+};
+
+const STATUS_LABELS = {
+  sent: 'Completed', completed: 'Completed',
+  in_progress: 'In Progress', active: 'In Progress',
+  scheduled: 'Scheduled', draft: 'Draft',
+};
+
+const StatusPieChart = ({ data, loading }) => {
+  const chartData = (data || []).map(d => ({
+    name:  STATUS_LABELS[d._id] || d._id,
+    value: d.count,
+    color: STATUS_COLORS[d._id] || '#6b7280',
+  }));
+
+  return (
+    <div className="scard" style={{ height: 260 }}>
+      <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 12 }}>Campaign Status</div>
+      {loading || !chartData.length ? (
+        <div style={{ textAlign: 'center', paddingTop: 60, color: 'var(--text-muted)' }}>
+          {loading ? 'Loading…' : 'No data'}
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={200}>
+          <PieChart>
+            <Pie data={chartData} cx="50%" cy="50%" innerRadius={50} outerRadius={80}
+              dataKey="value" paddingAngle={3}>
+              {chartData.map((entry, i) => (
+                <Cell key={i} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip formatter={(value, name) => [value, name]} />
+            <Legend iconType="circle" iconSize={8} />
+          </PieChart>
+        </ResponsiveContainer>
+      )}
+    </div>
+  );
+};
+
+export default StatusPieChart;
+11. Replace src/components/reports/OpensChart.jsx
+jsx
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+
+const OpensChart = ({ data, loading }) => {
+  const chartData = (data || []).map(d => ({
+    date:  new Date(d.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
+    Opens: d.opens,
+  }));
+
+  return (
+    <div className="scard" style={{ height: 260 }}>
+      <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 12 }}>Opens Over Time</div>
+      {loading || !chartData.length ? (
+        <div style={{ textAlign: 'center', paddingTop: 60, color: 'var(--text-muted)' }}>
+          {loading ? 'Loading…' : 'No data'}
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={200}>
+          <AreaChart data={chartData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="opensGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.15}/>
+                <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border, #f0f0f0)" vertical={false}/>
+            <XAxis dataKey="date" tick={{ fontSize: 11 }} tickLine={false} axisLine={false}/>
+            <YAxis tick={{ fontSize: 11 }} tickLine={false} axisLine={false}/>
+            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }}/>
+            <Area type="monotone" dataKey="Opens" stroke="#6366f1" strokeWidth={2}
+              fill="url(#opensGrad)" dot={false} activeDot={{ r: 4 }}/>
+          </AreaChart>
+        </ResponsiveContainer>
+      )}
+    </div>
+  );
+};
+
+export default OpensChart;
+12. New src/components/reports/CampaignDrillDown.jsx
+jsx
+import React, { useEffect, useState } from 'react';
+import { fetchCampaignDetail } from '../../services/reportService';
+
+const STAT_CARDS = [
+  { key: 'totalSent',        label: 'Emails Sent',     format: v => v?.toLocaleString() },
+  { key: 'openRate',         label: 'Open Rate',        format: v => `${v}%` },
+  { key: 'clickRate',        label: 'Click Rate',       format: v => `${v}%` },
+  { key: 'bounceRate',       label: 'Bounce Rate',      format: v => `${v}%` },
+  { key: 'totalUnsubscribes',label: 'Unsubscribes',     format: v => v },
+  { key: 'totalDelivered',   label: 'Delivered',        format: v => v?.toLocaleString() },
+];
+
+const Tick = ({ v }) => (
+  <span style={{ color: v ? '#16a34a' : '#d1d5db', fontWeight: 600 }}>{v ? '✓' : '—'}</span>
+);
+
+const CampaignDrillDown = ({ campaignId, onBack }) => {
+  const [data, setData]     = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchCampaignDetail(campaignId)
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [campaignId]);
+
+  if (loading) return <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading campaign…</div>;
+  if (!data)   return <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Campaign not found</div>;
+
+  const { campaign, stats, history } = data;
+  const formatDate = iso => iso ? new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+
+  return (
+    <div>
+      {/* Back + Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+        <button className="btn btn-outline btn-sm" onClick={onBack}>← Back to Reports</button>
+        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>{campaign.name}</h2>
+        <span style={{
+          fontSize: 12, padding: '2px 10px', borderRadius: 12, fontWeight: 500,
+          background: campaign.status === 'sent' ? '#f0fdf4' : '#fffbeb',
+          color:      campaign.status === 'sent' ? '#16a34a' : '#d97706',
+        }}>
+          {campaign.status === 'sent' ? 'Completed' : campaign.status}
+        </span>
+      </div>
+
+      {/* Stat Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 12, marginBottom: 24 }}>
+        {STAT_CARDS.map(card => (
+          <div key={card.key} className="scard">
+            <div className="scard-label">{card.label}</div>
+            <div className="scard-value" style={{ fontSize: 22 }}>
+              {stats[card.key] != null ? card.format(stats[card.key]) : '—'}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* History Table */}
+      <div className="table-box">
+        <div style={{ padding: '14px 20px 10px', borderBottom: '1px solid var(--border)', fontWeight: 600, fontSize: 15 }}>
+          Recipient History
+          <span style={{ fontWeight: 400, fontSize: 13, color: 'var(--text-muted)', marginLeft: 8 }}>
+            ({history.length} recipients)
+          </span>
+        </div>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ background: 'var(--bg-secondary, #f9fafb)' }}>
+              {['Name / Email', 'Status', 'Opened', 'Clicked', 'Bounced', 'Unsubscribed', 'Sent At'].map(h => (
+                <th key={h} style={{ padding: '9px 14px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {history.length === 0 ? (
+              <tr><td colSpan={7} style={{ textAlign: 'center', padding: 28, color: 'var(--text-muted)' }}>No recipient data yet</td></tr>
+            ) : history.map((row, i) => (
+              <tr key={i} style={{ borderBottom: '1px solid var(--border, #f0f0f0)' }}>
+                <td style={{ padding: '11px 14px' }}>
+                  <div style={{ fontWeight: 500, fontSize: 13 }}>{row.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{row.email}</div>
+                </td>
+                <td style={{ padding: '11px 14px' }}>
+                  <span style={{
+                    fontSize: 12, padding: '2px 8px', borderRadius: 10, fontWeight: 500,
+                    background: row.bounced ? '#fef2f2' : '#f0fdf4',
+                    color:      row.bounced ? '#dc2626' : '#16a34a',
+                  }}>
+                    {row.bounced ? 'Bounced' : 'Delivered'}
+                  </span>
+                </td>
+                <td style={{ padding: '11px 14px' }}><Tick v={row.opened} /></td>
+                <td style={{ padding: '11px 14px' }}><Tick v={row.clicked} /></td>
+                <td style={{ padding: '11px 14px' }}><Tick v={row.bounced} /></td>
+                <td style={{ padding: '11px 14px' }}><Tick v={row.unsubscribed} /></td>
+                <td style={{ padding: '11px 14px', fontSize: 12, color: 'var(--text-muted)' }}>{formatDate(row.sentAt)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default CampaignDrillDown;
+13. Replace src/pages/ReportsPage.jsx
+jsx
+import React, { useState, useEffect, useCallback } from 'react';
+import ReportSummaryCards   from '../components/reports/ReportSummaryCards';
+import ReportCampaignTable  from '../components/reports/ReportCampaignTable';
+import StatusPieChart       from '../components/reports/StatusPieChart';
+import OpensChart           from '../components/reports/OpensChart';
+import CampaignDrillDown    from '../components/reports/CampaignDrillDown';
+import { fetchSummary, fetchCampaigns, fetchStatusBreakdown, fetchOpensOverTime } from '../services/reportService';
+
+const ReportsPage = () => {
+  const [summary,    setSummary]    = useState(null);
+  const [campaigns,  setCampaigns]  = useState([]);
+  const [pagination, setPagination] = useState(null);
+  const [statusData, setStatusData] = useState([]);
+  const [opensData,  setOpensData]  = useState([]);
+  const [loading,    setLoading]    = useState(true);
+  const [page,       setPage]       = useState(1);
+  const [selectedId, setSelectedId] = useState(null); // drill-down
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [sum, camps, status, opens] = await Promise.all([
+        fetchSummary(),
+        fetchCampaigns({ page, limit: 10 }),
+        fetchStatusBreakdown(),
+        fetchOpensOverTime(30),
+      ]);
+      setSummary(sum);
+      setCampaigns(camps.data || []);
+      setPagination(camps.pagination);
+      setStatusData(status || []);
+      setOpensData(opens || []);
+    } catch (err) {
+      console.error('Failed to load reports', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page]);
+
+  useEffect(() => { load(); }, [load]);
+
+  // Drill-down view
+  if (selectedId) {
+    return (
+      <div className="page-container">
+        <CampaignDrillDown campaignId={selectedId} onBack={() => setSelectedId(null)} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-container">
+      {/* Header */}
+      <div className="page-header" style={{ marginBottom: 24 }}>
+        <h1 className="page-title">Reports</h1>
+      </div>
+
+      {/* 1. Summary Cards */}
+      <ReportSummaryCards summary={summary} loading={loading} />
+
+      {/* 2. Campaign Performance Table */}
+      <ReportCampaignTable
+        campaigns={campaigns}
+        loading={loading}
+        pagination={pagination}
+        onSelect={setSelectedId}
+        onPageChange={setPage}
+      />
+
+      {/* 3. Charts Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 16 }}>
+        <StatusPieChart data={statusData} loading={loading} />
+        <OpensChart     data={opensData}  loading={loading} />
+      </div>
+    </div>
+  );
+};
+
+export default ReportsPage;
+Run order
+powershell
+# 1. Re-seed with stats computed
+cd D:\prova\ProvaCampaign_BE
+node seed/reportSeed.js
+
+# 2. Restart backend
+npm run dev
+
+# 3. Frontend
+cd D:\prova\ProvaCampaign_FE
+npm run dev
+Go to http://localhost:5173/reports — you'll see the new layout. Click any campaign row to see the drill-down screen.
+
+You said: ?
+Screenshot (629).png
+?
+
+17:21
+Claude responded: The layout is perfect!
+The layout is perfect! All sections are in the right place. The only problem is "No data" everywhere — the seed hasn't run yet with the new stats system.
+
+Run this in your backend terminal:
+
+powershell
+cd D:\prova\ProvaCampaign_BE
+node seed/reportSeed.js
+If it gives an error, the seed file needs the recomputeCampaignStats call added. Check what your seed/reportSeed.js currently ends with and paste the last 10 lines here so I can tell you exactly what to add.
+
+Also quickly verify the stats service exists:
+
+powershell
+ls D:\prova\ProvaCampaign_BE\services
+You should see statsService.js in there. If it's missing, create it now and paste the statsService.js code from above.
+
+After seed runs successfully you should see output like:
+
+✅  Connected to MongoDB
+📋  Found 5 campaigns — generating email logs + events
+📧  Created 74 email logs
+📊  Created 35 events
+📊  Campaign stats computed    ← this line confirms stats are written
+✅  Reports seed complete!
+Once that appears, refresh the browser — all cards and charts will populate with real data. What does the seed output show?
+
+You said: PS D:\prova\ProvaCampaign_BE> npm run dev
+PS D:\prova\ProvaCampaign_BE> npm run dev                          
+> prova-campaign-backend@1.0.0 dev
+> nodemon server.js
+[nodemon] 3.1.14
+[nodemon] to restart at any time, enter rs
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting node server.js
+node:internal/modules/cjs/loader:1424
+  throw err;
+  ^
+Error: Cannot find module '../middleware/authMiddleware'
+Require stack:
+- D:\prova\ProvaCampaign_BE\routes\reportRoutes.js
+- D:\prova\ProvaCampaign_BE\server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1504:12)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (D:\prova\ProvaCampaign_BE\routes\reportRoutes.js:4:17)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'D:\\prova\\ProvaCampaign_BE\\routes\\reportRoutes.js',
+    'D:\\prova\\ProvaCampaign_BE\\server.js'
+  ]
+}
+Node.js v24.13.0
+[nodemon] app crashed - waiting for file changes before starting...
+
+Show more
+17:22
+Claude responded: The reportRoutes.
+The reportRoutes.js is looking for ../middleware/authMiddleware but your folder is named differently. Let's check:
+
+powershell
+ls D:\prova\ProvaCampaign_BE\middleware
+It will show the actual filename. Based on your earlier screenshots it's likely authMiddleware.js but the path is wrong.
+
+Fix — open routes/reportRoutes.js and change line 4:
+
+Find this:
+
+js
+const auth = require('../middleware/authMiddleware');
+Check what your actual middleware folder and file is named. Common possibilities:
+
+Option A — if your file is in middleware/authMiddleware.js:
+
+js
+const auth = require('../middleware/authMiddleware');
+Option B — if your file is in middleware/auth.js:
+
+js
+const auth = require('../middleware/auth');
+Option C — if the folder is named differently, run this to find it:
+
+powershell
+ls D:\prova\ProvaCampaign_BE
+This shows all your top-level folders. Look for anything named middleware or middlewares.
+
+Also check routes/peopleRoutes.js — it has the same require. Once you find the correct path, update both files:
+
+routes/reportRoutes.js line 4
+routes/peopleRoutes.js line 4
+Paste what ls D:\prova\ProvaCampaign_BE shows and I'll give you the exact fix.
+
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/reportController');
+const auth    = require('../middleware/authMiddleware');
+
+router.use(auth);
+
+router.get('/summary',          ctrl.getSummary);
+router.get('/campaigns',        ctrl.getCampaigns);
+router.get('/campaigns/:id',    ctrl.getCampaignDetail);
+router.get('/status-breakdown', ctrl.getCampaignStatusBreakdown);
+router.get('/opens-over-time',  ctrl.getOpensOverTime);
+
+module.exports = router;
+Show more
+17:24
+Claude responded: The code looks correct.
+The code looks correct. The problem is the folder/file name doesn't match. Run this to find the exact name:
+
+powershell
+ls D:\prova\ProvaCampaign_BE\middleware
+Tell me what it shows. It will be something like:
+
+auth.js
+authMiddleware.js
+authenticate.js
+verifyToken.js
+Then change line 4 in routes/reportRoutes.js to match exactly what you see.
+
+For example if it shows auth.js:
+
+js
+const auth = require('../middleware/auth');
+If it shows authMiddleware.js then the path is correct but the folder name might be wrong. Also run:
+
+powershell
+ls D:\prova\ProvaCampaign_BE
+This shows all your top-level folders — paste the output here and I'll give you the exact one-line fix immediately.
+
+You said: PS D:\prova\ProvaCampaignBE> ls D:\prova\ProvaCampaignBE\middleware
+PS D:\prova\ProvaCampaign_BE> ls D:\prova\ProvaCampaign_BE\middleware
+    Directory: D:\prova\ProvaCampaign_BE\middleware
+Mode                 LastWriteTime         Length Name                                                                          
+----                 -------------         ------ ----                                                                          
+-a----        29-04-2026     21:50            954 errorHandler.js                                                               
+PS D:\prova\ProvaCampaign_BE>
+
+17:24
+Claude responded: Your middleware folder only has errorHandler.
+Your middleware folder only has errorHandler.js — there is no authMiddleware.js. Let's check where your auth middleware actually is:
+
+powershell
+ls D:\prova\ProvaCampaign_BE\config
+Also check:
+
+powershell
+Get-ChildItem -Recurse -Filter "*.js" D:\prova\ProvaCampaign_BE | Where-Object { $_.Name -like "*auth*" }
+This will find the auth file wherever it is. Paste the output and I'll give you the exact fix.
+
+In the meantime, open your existing server.js and look at how other routes (like campaignRoutes) import their auth — copy that exact same require path into your reportRoutes.js and peopleRoutes.js.
+
+For example if server.js or any existing route file has something like:
+
+js
+const auth = require('./config/auth');
+// or
+const auth = require('./utils/verifyToken');
+// or
+const { protect } = require('./middleware/protect');
+Use that exact same line in your routes files.
+
+Paste the result of the search command above and I'll fix it in one line.
+
+You said: PS D:\prova\ProvaCampaignBE> ls D:\prova\ProvaCampaignBE\config
+PS D:\prova\ProvaCampaign_BE> ls D:\prova\ProvaCampaign_BE\config
+    Directory: D:\prova\ProvaCampaign_BE\config
+Mode                 LastWriteTime         Length Name                                                                          
+----                 -------------         ------ ----                                                                          
+-a----        29-04-2026     21:50            369 db.js                                                                         
+PS D:\prova\ProvaCampaign_BE> Get-ChildItem -Recurse -Filter "*.js" D:\prova\ProvaCampaign_BE | Where-Object { $_.Name -like "*auth*" }
+    Directory: D:\prova\ProvaCampaign_BE\node_modules\mongodb\lib
+Mode                 LastWriteTime         Length Name                                                                          
+----                 -------------         ------ ----                                                                          
+-a----        29-04-2026     21:50           3987 mongo_client_auth_providers.js                                                
+    Directory: D:\prova\ProvaCampaign_BE\node_modules\mongodb\lib\cmap\auth
+Mode                 LastWriteTime         Length Name                                                                          
+----                 -------------         ------ ----                                                                          
+-a----        29-04-2026     21:50           1526 auth_provider.js                                                              
+PS D:\prova\ProvaCampaign_BE>
+
+Show more
+17:25
+Claude responded: There is no auth middleware at all in your project — only inside node_modules.
+There is no auth middleware at all in your project — only inside node_modules. Your existing routes don't use auth. Let's check your server.js to confirm:
+
+powershell
+cat D:\prova\ProvaCampaign_BE\server.js
+Paste the output. But in the meantime, quick fix — just remove the auth requirement from both route files since your app doesn't have auth middleware yet.
+
+Fix routes/reportRoutes.js — replace entire file:
+
+js
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/reportController');
+
+router.get('/summary',          ctrl.getSummary);
+router.get('/campaigns',        ctrl.getCampaigns);
+router.get('/campaigns/:id',    ctrl.getCampaignDetail);
+router.get('/status-breakdown', ctrl.getCampaignStatusBreakdown);
+router.get('/opens-over-time',  ctrl.getOpensOverTime);
+
+module.exports = router;
+Fix routes/peopleRoutes.js — replace entire file:
+
+js
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/peopleController');
+
+router.get   ('/summary',              ctrl.getSummary);
+router.get   ('/contacts',             ctrl.getContacts);
+router.get   ('/contacts/:id',         ctrl.getContact);
+router.post  ('/contacts',             ctrl.createContact);
+router.put   ('/contacts/:id',         ctrl.updateContact);
+router.delete('/contacts/:id',         ctrl.deleteContact);
+router.post  ('/contacts/bulk-delete', ctrl.bulkDeleteContacts);
+router.post  ('/import',               ctrl.importContacts);
+router.get   ('/export',               ctrl.exportContacts);
+router.get   ('/tags',                 ctrl.getTags);
+router.get   ('/lists',                ctrl.getLists);
+router.post  ('/lists',                ctrl.createList);
+router.delete('/lists/:id',            ctrl.deleteList);
+
+module.exports = router;
+Also fix the same line in controllers/peopleController.js — the req.user.orgId will fail without auth. Replace every req.user.orgId with a hardcoded orgId for now:
+
+Open controllers/peopleController.js and controllers/reportController.js, find:
+
+js
+const orgId = toObjId(req.user.orgId);
+Replace with:
+
+js
+const orgId = toObjId(req.query.orgId || '65f1a2b3c4d5e6f7a8b9c0d1');
+Do that in both controller files for every occurrence. Then run:
+
+powershell
+npm run dev
+It should start cleanly. Paste what cat server.js shows so I can see how your existing routes are structured.
+
+You said: throw new Error(msg);
+throw new Error(msg);
+        ^
+Error: Route.get() requires a callback function but got a [object Undefined]
+    at Route.<computed> [as get] (D:\prova\ProvaCampaign_BE\node_modules\express\lib\router\route.js:216:15)
+    at proto.<computed> [as get] (D:\prova\ProvaCampaign_BE\node_modules\express\lib\router\index.js:521:19)
+    at Object.<anonymous> (D:\prova\ProvaCampaign_BE\routes\trackingRoutes.js:6:8)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)
+    at Module.load (node:internal/modules/cjs/loader:1481:32)
+    at Module._load (node:internal/modules/cjs/loader:1300:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1504:12)
+Node.js v24.13.0
+[nodemon] app crashed - waiting for file changes before starting...
+
+Show more
+17:28
+Claude responded: The error is in trackingRoutes.
+The error is in trackingRoutes.js — it's importing a function that doesn't exist in your controller. Let's see the files:
+
+powershell
+cat D:\prova\ProvaCampaign_BE\routes\trackingRoutes.js
+cat D:\prova\ProvaCampaign_BE\controllers\trackingController.js
+Paste both outputs. But the fix is simple — open routes/trackingRoutes.js and check what controller functions it's calling. The function name in the route doesn't match what's exported from the controller.
+
+Quick fix — replace routes/trackingRoutes.js with this:
+
+js
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/trackingController');
+
+router.get('/open',  ctrl.trackOpen);
+router.get('/click', ctrl.trackClick);
+
+module.exports = router;
+Then open controllers/trackingController.js and make sure it exports exactly these two functions:
+
+js
+exports.trackOpen  = async (req, res) => { ... }
+exports.trackClick = async (req, res) => { ... }
+If the function names are different (like recordOpen, openEmail, etc.), either:
+
+Option A — change the route to match the controller:
+
+js
+router.get('/open',  ctrl.recordOpen);   // whatever name is in the controller
+router.get('/click', ctrl.recordClick);
+Option B — change the controller exports to match the route.
+
+Paste the output of both cat commands and I'll give you the exact one-line fix.
+
+You said: ?
+Screenshot (630).png
+?
+
+17:30
+Claude responded: The error says MODULENOTFOUND for trackingController — the file doesn't exist in your controllers folder.
+The error says MODULE_NOT_FOUND for trackingController — the file doesn't exist in your controllers folder. Looking at your sidebar, I can see there is no trackingController.js in controllers.
+
+Two options:
+
+Option 1 — Quickest fix: Comment out tracking routes in server.js for now since you don't need them yet. Open server.js and find the tracking route line and comment it out:
+
+js
+// app.use('/api/track', trackingRoutes);  // comment this out
+Also comment out the require at the top:
+
+js
+// const trackingRoutes = require('./routes/trackingRoutes');
+Option 2 — Create the missing controller. Create controllers/trackingController.js:
+
+js
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+const { recomputeCampaignStats } = require('../services/statsService');
+
+// 1x1 transparent GIF pixel
+const PIXEL = Buffer.from(
+  'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64'
+);
+
+exports.trackOpen = async (req, res) => {
+  // Always return pixel immediately
+  res.set('Content-Type', 'image/gif');
+  res.set('Cache-Control', 'no-store');
+  res.send(PIXEL);
+
+  // Fire-and-forget: record event async
+  try {
+    const { t } = req.query;
+    if (!t) return;
+    const log = await EmailLog.findOne({ trackingToken: t });
+    if (!log) return;
+
+    const exists = await Event.findOne({ emailLogId: log._id, type: 'open' });
+    await Event.create({
+      orgId:            log.orgId,
+      campaignId:       log.campaignId,
+      contactId:        log.contactId,
+      emailLogId:       log._id,
+      type:             'open',
+      isFirstOccurrence: !exists,
+      occurredAt:       new Date(),
+    });
+
+    recomputeCampaignStats(log.campaignId).catch(console.error);
+  } catch (err) {
+    console.error('trackOpen error:', err.message);
+  }
+};
+
+exports.trackClick = async (req, res) => {
+  const { t, url } = req.query;
+  const dest = url || '/';
+
+  // Redirect immediately
+  res.redirect(302, dest);
+
+  // Fire-and-forget
+  try {
+    if (!t) return;
+    const log = await EmailLog.findOne({ trackingToken: t });
+    if (!log) return;
+
+    const exists = await Event.findOne({ emailLogId: log._id, type: 'click' });
+    await Event.create({
+      orgId:            log.orgId,
+      campaignId:       log.campaignId,
+      contactId:        log.contactId,
+      emailLogId:       log._id,
+      type:             'click',
+      isFirstOccurrence: !exists,
+      occurredAt:       new Date(),
+    });
+
+    recomputeCampaignStats(log.campaignId).catch(console.error);
+  } catch (err) {
+    console.error('trackClick error:', err.message);
+  }
+};
+Go with Option 1 first (comment out tracking in server.js) to get the server running immediately. Then add the controller after. Save server.js and the terminal should show the server starting cleanly.
+
+Screenshot (631).png
+17:32
+Claude responded: The error is now in trackingController.
+The error is now in trackingController.js line 3 — it can't find ../services/statsService. Looking at your sidebar, the services folder exists but statsService.js is missing from it.
+
+Create services/statsService.js — right-click the services folder in VS Code → New File → statsService.js and paste:
+
+js
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+exports.recomputeCampaignStats = async (campaignId) => {
+  const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+    EmailLog.countDocuments({ campaignId }),
+    Event.countDocuments({ campaignId, type: 'open',  isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'click', isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'bounce' }),
+    Event.countDocuments({ campaignId, type: 'unsubscribe' }),
+  ]);
+
+  const delivered = logs - bounces;
+  const base      = delivered || 1;
+
+  const stats = {
+    totalSent:          logs,
+    totalDelivered:     delivered,
+    totalBounced:       bounces,
+    totalOpens:         opens,
+    totalClicks:        clicks,
+    totalUnsubscribes:  unsubs,
+    openRate:           Math.round((opens   / base)             * 1000) / 10,
+    clickRate:          Math.round((clicks  / base)             * 1000) / 10,
+    bounceRate:         Math.round((bounces / (logs || 1))      * 1000) / 10,
+    unsubscribeRate:    Math.round((unsubs  / base)             * 1000) / 10,
+    lastEventAt:        new Date(),
+  };
+
+  await Campaign.findByIdAndUpdate(campaignId, { $set: { stats } });
+  return stats;
+};
+Save it. Nodemon will auto-restart. The server should start cleanly now.
+
+You said: Require stack:
+Require stack:
+- D:\prova\ProvaCampaign_BE\controllers\trackingController.js
+- D:\prova\ProvaCampaign_BE\routes\trackingRoutes.js
+- D:\prova\ProvaCampaign_BE\server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1504:12)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (D:\prova\ProvaCampaign_BE\controllers\trackingController.js:3:36)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'D:\\prova\\ProvaCampaign_BE\\controllers\\trackingController.js',
+    'D:\\prova\\ProvaCampaign_BE\\routes\\trackingRoutes.js',
+    'D:\\prova\\ProvaCampaign_BE\\server.js'
+  ]
+}
+Node.js v24.13.0
+[nodemon] app crashed - waiting for file changes before starting...
+
+Show more
+17:34
+Claude responded: Still the same error — statsService.
+Still the same error — statsService.js is not saved yet or not in the right place. Check:
+
+powershell
+ls D:\prova\ProvaCampaign_BE\services
+If statsService.js is not listed, the file wasn't created.
+
+Quickest fix — remove the statsService dependency from trackingController.js for now. Open controllers/trackingController.js and replace line 3 which says:
+
+js
+const { recomputeCampaignStats } = require('../services/statsService');
+Change it to an inline version — replace the entire file with this:
+
+js
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+const Campaign = require('../models/Campaign');
+
+const PIXEL = Buffer.from(
+  'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64'
+);
+
+const recomputeStats = async (campaignId) => {
+  try {
+    const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+      EmailLog.countDocuments({ campaignId }),
+      Event.countDocuments({ campaignId, type: 'open',  isFirstOccurrence: true }),
+      Event.countDocuments({ campaignId, type: 'click', isFirstOccurrence: true }),
+      Event.countDocuments({ campaignId, type: 'bounce' }),
+      Event.countDocuments({ campaignId, type: 'unsubscribe' }),
+    ]);
+    const delivered = logs - bounces;
+    const base      = delivered || 1;
+    await Campaign.findByIdAndUpdate(campaignId, { $set: { stats: {
+      totalSent: logs, totalDelivered: delivered, totalBounced: bounces,
+      totalOpens: opens, totalClicks: clicks, totalUnsubscribes: unsubs,
+      openRate:        Math.round((opens   / base)        * 1000) / 10,
+      clickRate:       Math.round((clicks  / base)        * 1000) / 10,
+      bounceRate:      Math.round((bounces / (logs || 1)) * 1000) / 10,
+      unsubscribeRate: Math.round((unsubs  / base)        * 1000) / 10,
+      lastEventAt: new Date(),
+    }}});
+  } catch (err) {
+    console.error('recomputeStats error:', err.message);
+  }
+};
+
+exports.trackOpen = async (req, res) => {
+  res.set('Content-Type', 'image/gif');
+  res.set('Cache-Control', 'no-store');
+  res.send(PIXEL);
+  try {
+    const { t } = req.query;
+    if (!t) return;
+    const log = await EmailLog.findOne({ trackingToken: t });
+    if (!log) return;
+    const exists = await Event.findOne({ emailLogId: log._id, type: 'open' });
+    await Event.create({
+      orgId: log.orgId, campaignId: log.campaignId, contactId: log.contactId,
+      emailLogId: log._id, type: 'open', isFirstOccurrence: !exists, occurredAt: new Date(),
+    });
+    recomputeStats(log.campaignId);
+  } catch (err) {
+    console.error('trackOpen error:', err.message);
+  }
+};
+
+exports.trackClick = async (req, res) => {
+  const { t, url } = req.query;
+  res.redirect(302, url || '/');
+  try {
+    if (!t) return;
+    const log = await EmailLog.findOne({ trackingToken: t });
+    if (!log) return;
+    const exists = await Event.findOne({ emailLogId: log._id, type: 'click' });
+    await Event.create({
+      orgId: log.orgId, campaignId: log.campaignId, contactId: log.contactId,
+      emailLogId: log._id, type: 'click', isFirstOccurrence: !exists, occurredAt: new Date(),
+    });
+    recomputeStats(log.campaignId);
+  } catch (err) {
+    console.error('trackClick error:', err.message);
+  }
+};
+Save → nodemon restarts → server should start. Then run the seed:
+
+powershell
+node seed/reportSeed.js
+Screenshot (632).png
+17:36
+Claude responded: Server is running now!
+Server is running now! Layout is perfect. Data is still empty — just need to run the seed. Run this now:
+
+powershell
+cd D:\prova\ProvaCampaign_BE
+node seed/reportSeed.js
+Paste what the terminal shows after running it.
+
+You said: PS D:\prova\ProvaCampaign_BE> node seed/reportSeed.
+PS D:\prova\ProvaCampaign_BE> node seed/reportSeed.js
+(node:25152) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///D:/prova/ProvaCampaign_BE/seed/reportSeed.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to D:\prova\ProvaCampaign_BE\package.json.
+(Use node --trace-warnings ... to show where the warning was created)
+file:///D:/prova/ProvaCampaign_BE/seed/reportSeed.js:1
+require('dotenv').config()
+^
+ReferenceError: Cannot determine intended module format because both require() and top-level await are present. If the code is intended to be CommonJS, wrap await in an async function. If the code is intended to be an ES module, replace require() with import.
+    at file:///D:/prova/ProvaCampaign_BE/seed/reportSeed.js:1:1
+    at [ModuleJob.run](http://ModuleJob.run) (node:internal/modules/esm/module_job:413:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  code: 'ERR_AMBIGUOUS_MODULE_SYNTAX'
+}
+Node.js v24.13.0
+PS D:\prova\ProvaCampaign_BE>
+
+Show more
+17:37
+Claude responded: The seed file has mixed require() and await at top level.
+The seed file has mixed require() and await at top level. Replace the entire seed/reportSeed.js with this fixed version:
+
+js
+require('dotenv').config();
+const mongoose = require('mongoose');
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+const ORG_ID = new mongoose.Types.ObjectId('65f1a2b3c4d5e6f7a8b9c0d1');
+
+const rand    = arr => arr[Math.floor(Math.random() * arr.length)];
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const recomputeStats = async (campaignId) => {
+  const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+    EmailLog.countDocuments({ campaignId }),
+    Event.countDocuments({ campaignId, type: 'open',  isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'click', isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'bounce' }),
+    Event.countDocuments({ campaignId, type: 'unsubscribe' }),
+  ]);
+  const delivered = logs - bounces;
+  const base      = delivered || 1;
+  await Campaign.findByIdAndUpdate(campaignId, { $set: { stats: {
+    totalSent: logs, totalDelivered: delivered, totalBounced: bounces,
+    totalOpens: opens, totalClicks: clicks, totalUnsubscribes: unsubs,
+    openRate:        Math.round((opens   / base)        * 1000) / 10,
+    clickRate:       Math.round((clicks  / base)        * 1000) / 10,
+    bounceRate:      Math.round((bounces / (logs || 1)) * 1000) / 10,
+    unsubscribeRate: Math.round((unsubs  / base)        * 1000) / 10,
+    lastEventAt: new Date(),
+  }}});
+};
+
+async function run() {
+  await mongoose.connect(process.env.MONGO_URI);
+  console.log('✅  Connected to MongoDB');
+
+  await EmailLog.deleteMany({ orgId: ORG_ID });
+  await Event.deleteMany({ orgId: ORG_ID });
+  console.log('🗑   Cleared EmailLog + Event');
+
+  const campaigns = await Campaign.find({ orgId: ORG_ID });
+  if (!campaigns.length) {
+    console.log('❌  No campaigns found. Make sure campaigns exist in DB.');
+    await mongoose.disconnect();
+    return;
+  }
+  console.log(`📋  Found ${campaigns.length} campaigns`);
+
+  const TYPES    = ['open', 'click', 'bounce', 'unsubscribe'];
+  const DEVICES  = ['mobile', 'desktop', 'tablet'];
+  const emails   = [];
+  const events   = [];
+
+  for (const campaign of campaigns) {
+    const count = randInt(50, 200);
+    for (let i = 0; i < count; i++) {
+      const token = `tok_${campaign._id}_${i}_${Date.now()}`;
+      const daysAgo = randInt(0, 30);
+      const sentAt  = new Date(Date.now() - daysAgo * 86400000);
+
+      emails.push({
+        orgId:         ORG_ID,
+        campaignId:    campaign._id,
+        contactId:     new mongoose.Types.ObjectId(),
+        trackingToken: token,
+        status:        'delivered',
+        createdAt:     sentAt,
+      });
+
+      // 35% open rate
+      if (Math.random() < 0.35) {
+        events.push({
+          orgId: ORG_ID, campaignId: campaign._id,
+          contactId: new mongoose.Types.ObjectId(),
+          type: 'open', isFirstOccurrence: true,
+          device: rand(DEVICES),
+          occurredAt: new Date(sentAt.getTime() + randInt(1, 48) * 3600000),
+        });
+        // 30% of openers click
+        if (Math.random() < 0.30) {
+          events.push({
+            orgId: ORG_ID, campaignId: campaign._id,
+            contactId: new mongoose.Types.ObjectId(),
+            type: 'click', isFirstOccurrence: true,
+            device: rand(DEVICES),
+            occurredAt: new Date(sentAt.getTime() + randInt(1, 72) * 3600000),
+          });
+        }
+      }
+      // 3% bounce
+      if (Math.random() < 0.03) {
+        events.push({
+          orgId: ORG_ID, campaignId: campaign._id,
+          contactId: new mongoose.Types.ObjectId(),
+          type: 'bounce', isFirstOccurrence: true,
+          occurredAt: sentAt,
+        });
+      }
+      // 1% unsubscribe
+      if (Math.random() < 0.01) {
+        events.push({
+          orgId: ORG_ID, campaignId: campaign._id,
+          contactId: new mongoose.Types.ObjectId(),
+          type: 'unsubscribe', isFirstOccurrence: true,
+          occurredAt: sentAt,
+        });
+      }
+    }
+  }
+
+  await EmailLog.insertMany(emails);
+  console.log(`📧  Created ${emails.length} email logs`);
+
+  await Event.insertMany(events);
+  console.log(`📊  Created ${events.length} events`);
+
+  // Compute stats for each campaign
+  for (const campaign of campaigns) {
+    await recomputeStats(campaign._id);
+  }
+  console.log('📈  Campaign stats computed');
+
+  console.log('✅  Seed complete!');
+  await mongoose.disconnect();
+}
+
+run().catch(err => { console.error(err); process.exit(1); });
+Save and run:
+
+powershell
+node seed/reportSeed.js
+You said: now i can share the full content and the report website output .
+Screenshot (633).png
+Screenshot (634).png
+
+Claude finished the response Screenshot (632).png Claude finished the response You said: now next people module i can share the people thing you can take the context only . 1777533674425_WhatsApp Image 2026-04-30 at 12.49.49 PM.jpeg You said: You are a senior full-stack engineer. You are a sen
+
+pasted
+
+now i can share the full content and the report website output .now what you can to do means in the campaign performance i can click any particular campaign means it be goes to straingt a single campaing its not a right .i can share the another campaign module in there i can click the chrimas campaign in the so many carts or schedules arfe available in that particular chrimas campaign itself like that nos in my report module i can click the example chrimast blast means in inside the new screen shows the carts of in the chrimas campaign cards can showsthe which are completed , scheduled , inprogress like that full history clearly and easly to identifiing . like that all campaign performance .net colore like praogress means yello and then success means in be fgreen like that etc.. you can give an color eastly to idetiy what [tells.like](http://tells.like) that in that website ther is no schroll down and up so change that aned in inside receipt hstory you can remove it
+
+18:21
+
+You are out of free messages until 9:50 PM
+Get more
+
+Claude finished the response Screenshot (632).png Claude finished the response You said: now next people module i can share the people thing you can take the context only . 1777533674425_WhatsApp Image 2026-04-30 at 12.49.49 PM.jpeg You said: You are a senior full-stack engineer. You are a sen
+
+pasted
+
+
+Screenshot (633).png
+
+Screenshot (634).png
+
+now i can share the full content and the report website output .now what you can to do means in the campaign performance i can click any particular campaign means it be goes to straingt a single campaing its not a right .i can share the another campaign module in there i can click the chrimas campaign in the so many carts or schedules arfe available in that particular chrimas campaign itself like that nos in my report module i can click the example chrimast blast means in inside the new screen shows the carts of in the chrimas campaign cards can showsthe which are completed , scheduled , inprogress like that full history clearly and easly to identifiing . like that all campaign performance .net colore like praogress means yello and then success means in be fgreen like that etc.. you can give an color eastly to idetiy what [tells.like](http://tells.like) that in that website ther is no schroll down and up so change that aned in inside receipt hstory you can remove it
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+
+
+
+Pasted content
+46.24 KB •1,112 lines
+Formatting may be inconsistent from source
+
+
+Claude finished the response
+Screenshot (632).png
+
+Claude finished the response You said: now next people module i can share the people thing you can take the context only . 1777533674425_WhatsApp Image 2026-04-30 at 12.49.49 PM.jpeg You said: You are a senior full-stack engineer. You are a senior full-stack engineer. I am building a SaaS Ema
+
+pasted
+
+17:41
+Claude responded: Looking at the screenshot, the Reports page layout is correct but showing "No data" / "No campaigns found" everywhere.
+Looking at the screenshot, the Reports page layout is correct but showing "No data" / "No campaigns found" everywhere. The seed hasn't run successfully yet. Let's fix this step by step.
+
+The issue is your reportSeed.js looks for campaigns with orgId: ORG_ID but your campaigns might have a different orgId. Let's check and fix:
+
+Step 1 — Find your actual orgId from the database:
+
+Run this in your backend terminal:
+
+powershell
+cd D:\prova\ProvaCampaign_BE
+node -e "require('dotenv').config(); const mongoose = require('mongoose'); mongoose.connect(process.env.MONGO_URI).then(async () => { const Campaign = require('./models/Campaign'); const c = await Campaign.findOne(); console.log('orgId:', c?.orgId, 'status:', c?.status); mongoose.disconnect(); });"
+Step 2 — Paste the output here. It will show the real orgId stored in your campaigns.
+
+Then I'll give you the exact seed fix with the correct orgId so the seed finds your existing campaigns and populates data.
+
+Also run this to confirm campaigns exist at all:
+
+powershell
+node -e "require('dotenv').config(); const mongoose = require('mongoose'); mongoose.connect(process.env.MONGO_URI).then(async () => { const Campaign = require('./models/Campaign'); const count = await Campaign.countDocuments(); console.log('Total campaigns:', count); mongoose.disconnect(); });"
+Paste both outputs and I'll give you the exact one-line fix to get data showing immediately.
+
+You said: PS D:\prova\ProvaCampaignBE> cd D:\prova\ProvaCampaignBE
+PS D:\prova\ProvaCampaign_BE> cd D:\prova\ProvaCampaign_BE
+>> node -e "require('dotenv').config(); const mongoose = require('mongoose'); mongoose.connect(process.env.MONGO_URI).then(async () => { const Campaign = require('./models/Campaign'); const c = await Campaign.findOne(); console.log('orgId:', c?.orgId, 'status:', c?.status); mongoose.disconnect(); });"
+D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:237
+    throw new MongooseError('The uri parameter to openUri() must be a ' +
+          ^ 
+
+MongooseError: The uri parameter to openUri() must be a string, got "undefined". Make sure the first parameter to mongoose.connect() or mongoose.createConnection() is a string.
+    at NativeConnection.createClient (D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:237:11)                                                      
+    at NativeConnection.openUri (D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\connection.js:1075:34)
+    at Mongoose.connect (D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\mongoose.js:450:15)
+    at [eval]:1:76
+    at runScriptInThisContext (node:internal/vm:219:10)
+    at node:internal/process/execution:451:12
+    at [eval]-wrapper:6:24
+    at runScriptInContext (node:internal/process/execution:449:60)
+    at evalFunction (node:internal/process/execution:283:30)
+    at evalTypeScript (node:internal/process/execution:295:3)
+Node.js v24.13.0
+PS D:\prova\ProvaCampaign_BE> node -e "require('dotenv').config(); const mongoose = require('mongoose'); mongoose.connect(process.env.MONGO_URI).then(async () => { const Campaign = require('./models/Campaign'); const count = await Campaign.countDocuments(); console.log('Total campaigns:', count); mongoose.disconnect(); });"
+D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:237
+    throw new MongooseError('The uri parameter to openUri() must be a ' +
+          ^
+MongooseError: The uri parameter to openUri() must be a string, got "undefined". Make sure the first parameter to mongoose.connect() or mongoose.createConnection() is a string.
+    at NativeConnection.createClient (D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:237:11)
+    at NativeConnection.openUri (D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\connection.js:1075:34)
+    at Mongoose.connect (D:\prova\ProvaCampaign_BE\node_modules\mongoose\lib\mongoose.js:450:15)
+    at [eval]:1:76
+    at runScriptInThisContext (node:internal/vm:219:10)
+    at node:internal/process/execution:451:12
+    at [eval]-wrapper:6:24
+    at runScriptInContext (node:internal/process/execution:449:60)
+    at evalFunction (node:internal/process/execution:283:30)
+    at evalTypeScript (node:internal/process/execution:295:3)
+Node.js v24.13.0
+PS D:\prova\ProvaCampaign_BE>
+
+Show more
+17:42
+Claude responded: The .
+The .env file isn't loading from the command line. Let's check your .env file name and content directly:
+
+Run this:
+
+powershell
+cat D:\prova\ProvaCampaign_BE\.env
+Also check if the file exists:
+
+powershell
+ls D:\prova\ProvaCampaign_BE -Force
+The -Force flag shows hidden files (.env can sometimes be hidden).
+
+Paste the output. I need to see:
+
+What your .env file is named (maybe it's .env.local or env.js)
+What MONGO_URI is set to
+Then I'll give you a fixed seed script that hardcodes the connection string directly so it bypasses the .env issue and runs cleanly.
+
+You said: PS D:\prova\ProvaCampaignBE> cat D:\prova\ProvaCampaignBE\.
+PS D:\prova\ProvaCampaign_BE> cat D:\prova\ProvaCampaign_BE\.env
+PORT=5000
+MONGODB_URI=mongodb://arunjayaraaj123_db_user:[Aruncherry123@ac-rs44pxg-shard-00-00.0txlpmz.mongodb.net:27017](mailto:Aruncherry123@ac-rs44pxg-shard-00-00.0txlpmz.mongodb.net:27017),[ac-rs44pxg-shard-00-01.0txlpmz.mongodb.net:27017](http://ac-rs44pxg-shard-00-01.0txlpmz.mongodb.net:27017),[ac-rs44pxg-shard-00-02.0txlpmz.mongodb.net:27017/provacampaign?ssl=true&replicaSet=atlas-f4lo89-shard-0&authSource=admin&retryWrites=true&w=majority&appName=provacampaign](http://ac-rs44pxg-shard-00-02.0txlpmz.mongodb.net:27017/provacampaign?ssl=true&replicaSet=atlas-f4lo89-shard-0&authSource=admin&retryWrites=true&w=majority&appName=provacampaign)
+CLIENT_URL=http://localhost:5173
+NODE_ENV=development
+PS D:\prova\ProvaCampaign_BE> ls D:\prova\ProvaCampaign_BE -Force
+    Directory: D:\prova\ProvaCampaign_BE
+Mode                 LastWriteTime         Length Name                                                                          
+----                 -------------         ------ ----                                                                          
+d--h--        30-04-2026     18:05                .git                                                                          
+d-----        29-04-2026     21:50                config                                                                        
+d-----        01-05-2026     17:31                controllers                                                                   
+d-----        29-04-2026     21:50                middleware                                                                    
+d-----        30-04-2026     13:17                models                                                                        
+d-----        29-04-2026     21:50                node_modules                                                                  
+d-----        30-04-2026     13:18                routes                                                                        
+d-----        30-04-2026     13:18                seed                                                                          
+d-----        01-05-2026     17:12                services                                                                      
+d-----        30-04-2026     16:15                utils                                                                         
+-a----        29-04-2026     21:50            397 .env                                                                          
+-a----        29-04-2026     21:50          53927 package-lock.json                                                             
+-a----        29-04-2026     21:50            485 package.json                                                                  
+-a----        30-04-2026     15:02           1592 server.js
+
+Show more
+17:43
+Claude responded: The variable is MONGODBURI not MONGOURI — that's why it was undefined.
+The variable is MONGODB_URI not MONGO_URI — that's why it was undefined. Now I'll give you a fixed seed script that uses the correct variable name.
+
+Replace your entire seed/reportSeed.js with this:
+
+javascript
+require('dotenv').config();
+const mongoose = require('mongoose');
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+const MONGO_URI = process.env.MONGODB_URI;
+
+const rand    = arr => arr[Math.floor(Math.random() * arr.length)];
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const recomputeStats = async (campaignId) => {
+  const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+    EmailLog.countDocuments({ campaignId }),
+    Event.countDocuments({ campaignId, type: 'open',  isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'click', isFirstOccurrence: true }),
+    Event.countDocuments({ campaignId, type: 'bounce' }),
+    Event.countDocuments({ campaignId, type: 'unsubscribe' }),
+  ]);
+  const delivered = logs - bounces;
+  const base      = delivered || 1;
+  await Campaign.findByIdAndUpdate(campaignId, { $set: { stats: {
+    totalSent: logs, totalDelivered: delivered, totalBounced: bounces,
+    totalOpens: opens, totalClicks: clicks, totalUnsubscribes: unsubs,
+    openRate:        Math.round((opens   / base)        * 1000) / 10,
+    clickRate:       Math.round((clicks  / base)        * 1000) / 10,
+    bounceRate:      Math.round((bounces / (logs || 1)) * 1000) / 10,
+    unsubscribeRate: Math.round((unsubs  / base)        * 1000) / 10,
+    lastEventAt: new Date(),
+  }}});
+};
+
+async function run() {
+  await mongoose.connect(MONGO_URI);
+  console.log('✅  Connected to MongoDB');
+
+  // Find ALL campaigns regardless of orgId
+  const campaigns = await Campaign.find({});
+  if (!campaigns.length) {
+    console.log('❌  No campaigns found in DB at all.');
+    await mongoose.disconnect();
+    return;
+  }
+  console.log(`📋  Found ${campaigns.length} campaigns`);
+
+  const orgId = campaigns[0].orgId;
+  console.log('🔑  Using orgId:', orgId);
+
+  // Clear old seed data for this org
+  await EmailLog.deleteMany({ orgId });
+  await Event.deleteMany({ orgId });
+  console.log('🗑   Cleared old EmailLog + Event data');
+
+  const DEVICES = ['mobile', 'desktop', 'tablet'];
+  const emails  = [];
+  const events  = [];
+
+  for (const campaign of campaigns) {
+    const count = randInt(50, 150);
+    for (let i = 0; i < count; i++) {
+      const token   = `tok_${campaign._id}_${i}_${Date.now()}`;
+      const daysAgo = randInt(0, 30);
+      const sentAt  = new Date(Date.now() - daysAgo * 86400000);
+      const contactId = new mongoose.Types.ObjectId();
+
+      emails.push({
+        orgId:         campaign.orgId,
+        campaignId:    campaign._id,
+        contactId,
+        trackingToken: token,
+        status:        'delivered',
+        createdAt:     sentAt,
+      });
+
+      // 38% open rate
+      if (Math.random() < 0.38) {
+        events.push({
+          orgId: campaign.orgId, campaignId: campaign._id, contactId,
+          type: 'open', isFirstOccurrence: true,
+          device: rand(DEVICES),
+          occurredAt: new Date(sentAt.getTime() + randInt(1, 48) * 3600000),
+        });
+        // 28% of openers click
+        if (Math.random() < 0.28) {
+          events.push({
+            orgId: campaign.orgId, campaignId: campaign._id, contactId,
+            type: 'click', isFirstOccurrence: true,
+            device: rand(DEVICES),
+            occurredAt: new Date(sentAt.getTime() + randInt(2, 72) * 3600000),
+          });
+        }
+      }
+      // 3% bounce
+      if (Math.random() < 0.03) {
+        events.push({
+          orgId: campaign.orgId, campaignId: campaign._id, contactId,
+          type: 'bounce', isFirstOccurrence: true,
+          occurredAt: sentAt,
+        });
+      }
+      // 1% unsubscribe
+      if (Math.random() < 0.01) {
+        events.push({
+          orgId: campaign.orgId, campaignId: campaign._id, contactId,
+          type: 'unsubscribe', isFirstOccurrence: true,
+          occurredAt: sentAt,
+        });
+      }
+    }
+  }
+
+  await EmailLog.insertMany(emails);
+  console.log(`📧  Created ${emails.length} email logs`);
+
+  await Event.insertMany(events);
+  console.log(`📊  Created ${events.length} events`);
+
+  for (const campaign of campaigns) {
+    await recomputeStats(campaign._id);
+    console.log(`  ✓ Stats computed for: ${campaign.name}`);
+  }
+
+  console.log('✅  Seed complete! Refresh your browser.');
+  await mongoose.disconnect();
+}
+
+run().catch(err => { console.error('❌ Seed error:', err.message); process.exit(1); });
+Then run:
+
+powershell
+node seed/reportSeed.js
+This will auto-detect your real orgId from existing campaigns, so no hardcoded ID needed. Paste the terminal output after running it.
+
+You said: PS D:\prova\ProvaCampaign_BE> node seed/reportSeed.
+PS D:\prova\ProvaCampaign_BE> node seed/reportSeed.js
+❌ Seed error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+PS D:\prova\ProvaCampaign_BE>
+
+17:45
+Claude responded: Your current IP isn't whitelisted in MongoDB Atlas.
+Your current IP isn't whitelisted in MongoDB Atlas. Fix it in 2 minutes:
+
+Step 1 — Open Atlas: Go to https://cloud.mongodb.com and log in.
+
+Step 2 — Whitelist your IP:
+
+Click your project → Network Access (left sidebar)
+Click + ADD IP ADDRESS
+Click ADD CURRENT IP ADDRESS (auto-fills your IP)
+Or click ALLOW ACCESS FROM ANYWHERE → adds 0.0.0.0/0 (easier for development)
+Click Confirm
+Step 3 — Wait ~30 seconds for it to apply, then run:
+
+powershell
+node seed/reportSeed.js
+If your IP changes often (home internet), use 0.0.0.0/0 for development — it allows all IPs. You can restrict it later for production.
+
+Also your backend server (npm run dev) is already connected because nodemon started before the IP changed — the seed runs as a separate Node process which is why it fails while the server still works.
+
+After whitelisting, paste the seed output here!
+
+You said: PS D:\prova\ProvaCampaign_BE> node seed/reportSeed.
+PS D:\prova\ProvaCampaign_BE> node seed/reportSeed.js
+✅  Connected to MongoDB
+📋  Found 5 campaigns
+🔑  Using orgId: undefined
+🗑   Cleared old EmailLog + Event data
+❌ Seed error: EmailLog validation failed: recipientEmail: Path recipientEmail is required., campaign: Path campaign is required.
+PS D:\prova\ProvaCampaign_BE> npm run dev                                                                                        
+
+prova-campaign-backend@1.0.0 dev                                                                                               
+nodemon server.js                         
+[nodemon] 3.1.14
+[nodemon] to restart at any time, enter rs
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting node server.js
+🚀  Server running on http://localhost:5000
+✅  MongoDB Atlas connected: ac-rs44pxg-shard-00-00.0txlpmz.mongod
+
+Show more
+17:49
+Claude responded: Your EmailLog model has different required fields than what the seed is using.
+Your EmailLog model has different required fields than what the seed is using. Let me check your actual model first:
+
+
+Check the EmailLog and Campaign model structure
+Check the EmailLog and Campaign model structure
+I need to see your actual EmailLog.js model. Run this:
+
+powershell
+cat D:\prova\ProvaCampaign_BE\models\EmailLog.js
+cat D:\prova\ProvaCampaign_BE\models\Campaign.js
+Paste both outputs. The seed is failing because your EmailLog schema requires recipientEmail and campaign fields (not contactId and campaignId). Once I see the exact field names in your schema, I'll fix the seed in one shot to match exactly.
+
+Also the orgId: undefined means your Campaign documents don't have an orgId field stored — I need to see the Campaign schema too to understand the structure.
+
+You said: PS D:\prova\ProvaCampaignBE> cat D:\prova\ProvaCampaignBE\models\EmailLog.
+PS D:\prova\ProvaCampaign_BE> cat D:\prova\ProvaCampaign_BE\models\EmailLog.js
+const mongoose = require('mongoose')
+/**
+ * EmailLog
+ * One document per email sent per campaign.
+ * Links Campaign â†’ Contact via trackingToken for open/click tracking.
+ */
+const emailLogSchema = new mongoose.Schema(
+  {
+    campaign: {
+      type:     mongoose.Schema.Types.ObjectId,
+      ref:      'Campaign',
+      required: true,
+      index:    true,
+    },
+    recipientEmail: {
+      type:     String,
+      required: true,
+      trim:     true,
+      lowercase: true,
+    },
+    recipientName: {
+      type:    String,
+      default: '',
+    },
+    status: {
+      type:    String,
+      enum:    ['sent', 'delivered', 'bounced', 'failed'],
+      default: 'sent',
+      index:   true,
+    },
+    bounceType: {
+      type:    String,
+      enum:    ['soft', 'hard', null],
+      default: null,
+    },
+    sentAt: {
+      type:    Date,
+      default: [Date.now](http://Date.now),
+    },
+    deliveredAt: { type: Date, default: null },
+    bouncedAt:   { type: Date, default: null },
+    // Unique token embedded in every email for tracking
+    trackingToken: {
+      type:     String,
+      required: true,
+      unique:   true,
+      index:    true,
+    },
+  },
+  { timestamps: true }
+)
+emailLogSchema.index({ campaign: 1, status: 1 })
+module.exports = mongoose.model('EmailLog', emailLogSchema)
+PS D:\prova\ProvaCampaign_BE> cat D:\prova\ProvaCampaign_BE\models\Campaign.js
+const mongoose = require('mongoose')
+/**
+ * Campaign
+ * Top-level document. Email blocks are stored separately
+ * and linked via campaign ObjectId. A virtual field
+ * emailBlocks is populated on demand.
+ */
+const campaignSchema = new mongoose.Schema(
+  {
+    name: {
+      type:     String,
+      required: [true, 'Campaign name is required'],
+      trim:     true,
+    },
+    description: {
+      type:    String,
+      default: '',
+    },
+    status: {
+      type:    String,
+      enum:    ['draft', 'scheduled', 'progress', 'success', 'failed'],
+      default: 'draft',
+    },
+    publishedAt: {
+      type:    Date,
+      default: null,
+    },
+     // Add inside your existing campaignSchema fields:
+    stats: {
+     totalSent:        { type: Number, default: 0 },
+     totalDelivered:   { type: Number, default: 0 },
+     totalBounced:     { type: Number, default: 0 },
+     totalOpens:       { type: Number, default: 0 },
+     totalClicks:      { type: Number, default: 0 },
+     totalUnsubscribes:{ type: Number, default: 0 },
+     openRate:         { type: Number, default: 0 },
+     clickRate:        { type: Number, default: 0 },
+     bounceRate:       { type: Number, default: 0 },
+     unsubscribeRate:  { type: Number, default: 0 },
+     lastEventAt:      { type: Date },
+     },
+  },
+  {
+    timestamps: true,
+    toJSON:     { virtuals: true },
+    toObject:   { virtuals: true },
+  }
+)
+// Virtual â€” populate email blocks when needed
+campaignSchema.virtual('emailBlocks', {
+  ref:          'EmailBlock',
+  localField:   '_id',
+  foreignField: 'campaign',
+})
+module.exports = mongoose.model('Campaign', campaignSchema)
+PS D:\prova\ProvaCampaign_BE>
+
+Show more
+17:50
+Claude responded: Now I can see the exact schema.
+Now I can see the exact schema. Your EmailLog uses campaign (not campaignId), needs recipientEmail, and Campaign has no orgId. Here's the fixed seed:
+
+Replace seed/reportSeed.js with this:
+
+javascript
+require('dotenv').config();
+const mongoose = require('mongoose');
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+const MONGO_URI = process.env.MONGODB_URI;
+
+const rand    = arr => arr[Math.floor(Math.random() * arr.length)];
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const FIRST   = ['Arun','Priya','Vikram','Meera','Ravi','Anjali','Karthik','Deepa','Suresh','Nisha'];
+const LAST    = ['Kumar','Sharma','Patel','Reddy','Nair','Iyer','Pillai','Menon','Rao','Gupta'];
+const DOMAINS = ['gmail.com','yahoo.com','outlook.com','hotmail.com'];
+const DEVICES = ['mobile','desktop','tablet'];
+
+const recomputeStats = async (campaignId) => {
+  const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+    EmailLog.countDocuments({ campaign: campaignId }),
+    Event.countDocuments({ campaign: campaignId, type: 'open',  isFirstOccurrence: true }),
+    Event.countDocuments({ campaign: campaignId, type: 'click', isFirstOccurrence: true }),
+    Event.countDocuments({ campaign: campaignId, type: 'bounce' }),
+    Event.countDocuments({ campaign: campaignId, type: 'unsubscribe' }),
+  ]);
+  const delivered = logs - bounces;
+  const base      = delivered || 1;
+  await Campaign.findByIdAndUpdate(campaignId, { $set: { stats: {
+    totalSent:         logs,
+    totalDelivered:    delivered,
+    totalBounced:      bounces,
+    totalOpens:        opens,
+    totalClicks:       clicks,
+    totalUnsubscribes: unsubs,
+    openRate:          Math.round((opens   / base)        * 1000) / 10,
+    clickRate:         Math.round((clicks  / base)        * 1000) / 10,
+    bounceRate:        Math.round((bounces / (logs || 1)) * 1000) / 10,
+    unsubscribeRate:   Math.round((unsubs  / base)        * 1000) / 10,
+    lastEventAt:       new Date(),
+  }}});
+};
+
+async function run() {
+  await mongoose.connect(MONGO_URI);
+  console.log('✅  Connected to MongoDB');
+
+  const campaigns = await Campaign.find({});
+  if (!campaigns.length) {
+    console.log('❌  No campaigns found.');
+    await mongoose.disconnect();
+    return;
+  }
+  console.log(`📋  Found ${campaigns.length} campaigns`);
+
+  // Clear old seed data
+  await EmailLog.deleteMany({});
+  await Event.deleteMany({});
+  console.log('🗑   Cleared old EmailLog + Event data');
+
+  const emails = [];
+  const events = [];
+
+  for (const campaign of campaigns) {
+    const count = randInt(60, 150);
+
+    for (let i = 0; i < count; i++) {
+      const fn    = rand(FIRST);
+      const ln    = rand(LAST);
+      const email = `${fn.toLowerCase()}.${ln.toLowerCase()}${randInt(1,999)}@${rand(DOMAINS)}`;
+      const token = `tok_${campaign._id}_${i}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const daysAgo = randInt(0, 30);
+      const sentAt  = new Date(Date.now() - daysAgo * 86400000);
+      const isBounced = Math.random() < 0.03;
+
+      emails.push({
+        campaign:       campaign._id,
+        recipientEmail: email,
+        recipientName:  `${fn} ${ln}`,
+        trackingToken:  token,
+        status:         isBounced ? 'bounced' : 'delivered',
+        sentAt,
+        deliveredAt:    isBounced ? null : sentAt,
+        bouncedAt:      isBounced ? sentAt : null,
+      });
+
+      // 38% open rate (non-bounced only)
+      if (!isBounced && Math.random() < 0.38) {
+        events.push({
+          campaign:          campaign._id,
+          recipientEmail:    email,
+          type:              'open',
+          isFirstOccurrence: true,
+          device:            rand(DEVICES),
+          occurredAt:        new Date(sentAt.getTime() + randInt(1, 48) * 3600000),
+        });
+        // 28% of openers click
+        if (Math.random() < 0.28) {
+          events.push({
+            campaign:          campaign._id,
+            recipientEmail:    email,
+            type:              'click',
+            isFirstOccurrence: true,
+            device:            rand(DEVICES),
+            occurredAt:        new Date(sentAt.getTime() + randInt(2, 72) * 3600000),
+          });
+        }
+      }
+      // 1% unsubscribe
+      if (!isBounced && Math.random() < 0.01) {
+        events.push({
+          campaign:          campaign._id,
+          recipientEmail:    email,
+          type:              'unsubscribe',
+          isFirstOccurrence: true,
+          occurredAt:        sentAt,
+        });
+      }
+    }
+  }
+
+  await EmailLog.insertMany(emails);
+  console.log(`📧  Created ${emails.length} email logs`);
+
+  await Event.insertMany(events);
+  console.log(`📊  Created ${events.length} events`);
+
+  for (const campaign of campaigns) {
+    await recomputeStats(campaign._id);
+    console.log(`  ✓ ${campaign.name} — stats computed`);
+  }
+
+  console.log('✅  Seed complete! Refresh your browser.');
+  await mongoose.disconnect();
+}
+
+run().catch(err => { console.error('❌ Seed error:', err.message); process.exit(1); });
+But first — show me your Event model so I use the right field names there too:
+
+powershell
+cat D:\prova\ProvaCampaign_BE\models\Event.js
+Paste it and I'll finalize the Event fields in the seed before you run it.
+
+You said: PS D:\prova\ProvaCampaignBE> cat D:\prova\ProvaCampaignBE\models\Event.
+PS D:\prova\ProvaCampaign_BE> cat D:\prova\ProvaCampaign_BE\models\Event.js
+const mongoose = require('mongoose')
+/**
+ * Event
+ * Raw tracking events â€” opens, clicks, unsubscribes.
+ * High-volume collection. Indexed for fast aggregation.
+ */
+const eventSchema = new mongoose.Schema(
+  {
+    campaign: {
+      type:     mongoose.Schema.Types.ObjectId,
+      ref:      'Campaign',
+      required: true,
+      index:    true,
+    },
+    emailLog: {
+      type:     mongoose.Schema.Types.ObjectId,
+      ref:      'EmailLog',
+      required: true,
+      index:    true,
+    },
+    type: {
+      type:     String,
+      enum:     ['open', 'click', 'unsubscribe', 'bounce'],
+      required: true,
+      index:    true,
+    },
+    // For click events
+    url: { type: String, default: null },
+    // Device parsed from User-Agent
+    device: {
+      type:    String,
+      enum:    ['desktop', 'mobile', 'tablet', 'unknown'],
+      default: 'unknown',
+    },
+    // First open/click only â€” used for unique rate calculations
+    isFirstOccurrence: {
+      type:    Boolean,
+      default: true,
+      index:   true,
+    },
+    occurredAt: {
+      type:    Date,
+      default: [Date.now](http://Date.now),
+      index:   true,
+    },
+  },
+  { timestamps: true }
+)
+// Core analytics indexes
+eventSchema.index({ campaign: 1, type: 1, isFirstOccurrence: 1 })
+eventSchema.index({ campaign: 1, type: 1, occurredAt: -1 })
+module.exports = mongoose.model('Event', eventSchema)
+PS D:\prova\ProvaCampaign_BE>
+
+Show more
+17:51
+Claude responded: Event requires emailLog (not optional).
+Event requires emailLog (not optional). Here's the fully corrected seed — replace seed/reportSeed.js:
+
+javascript
+require('dotenv').config();
+const mongoose = require('mongoose');
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+const MONGO_URI = process.env.MONGODB_URI;
+
+const rand    = arr => arr[Math.floor(Math.random() * arr.length)];
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const FIRST   = ['Arun','Priya','Vikram','Meera','Ravi','Anjali','Karthik','Deepa','Suresh','Nisha'];
+const LAST    = ['Kumar','Sharma','Patel','Reddy','Nair','Iyer','Pillai','Menon','Rao','Gupta'];
+const DOMAINS = ['gmail.com','yahoo.com','outlook.com','hotmail.com'];
+const DEVICES = ['mobile','desktop','tablet','unknown'];
+
+const recomputeStats = async (campaignId) => {
+  const [logs, opens, clicks, bounces, unsubs] = await Promise.all([
+    EmailLog.countDocuments({ campaign: campaignId }),
+    Event.countDocuments({ campaign: campaignId, type: 'open',        isFirstOccurrence: true }),
+    Event.countDocuments({ campaign: campaignId, type: 'click',       isFirstOccurrence: true }),
+    Event.countDocuments({ campaign: campaignId, type: 'bounce' }),
+    Event.countDocuments({ campaign: campaignId, type: 'unsubscribe' }),
+  ]);
+  const delivered = logs - bounces;
+  const base      = delivered || 1;
+  await Campaign.findByIdAndUpdate(campaignId, { $set: { stats: {
+    totalSent:         logs,
+    totalDelivered:    delivered,
+    totalBounced:      bounces,
+    totalOpens:        opens,
+    totalClicks:       clicks,
+    totalUnsubscribes: unsubs,
+    openRate:          Math.round((opens   / base)        * 1000) / 10,
+    clickRate:         Math.round((clicks  / base)        * 1000) / 10,
+    bounceRate:        Math.round((bounces / (logs || 1)) * 1000) / 10,
+    unsubscribeRate:   Math.round((unsubs  / base)        * 1000) / 10,
+    lastEventAt:       new Date(),
+  }}});
+};
+
+async function run() {
+  await mongoose.connect(MONGO_URI);
+  console.log('✅  Connected to MongoDB');
+
+  const campaigns = await Campaign.find({});
+  if (!campaigns.length) {
+    console.log('❌  No campaigns found.');
+    await mongoose.disconnect();
+    return;
+  }
+  console.log(`📋  Found ${campaigns.length} campaigns`);
+
+  await EmailLog.deleteMany({});
+  await Event.deleteMany({});
+  console.log('🗑   Cleared old data');
+
+  for (const campaign of campaigns) {
+    const count  = randInt(60, 150);
+    const events = [];
+
+    for (let i = 0; i < count; i++) {
+      const fn      = rand(FIRST);
+      const ln      = rand(LAST);
+      const email   = `${fn.toLowerCase()}.${ln.toLowerCase()}${randInt(1,999)}@${rand(DOMAINS)}`;
+      const token   = `tok_${campaign._id}_${i}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const daysAgo = randInt(0, 30);
+      const sentAt  = new Date(Date.now() - daysAgo * 86400000);
+      const isBounced = Math.random() < 0.03;
+
+      // Create EmailLog first to get its _id
+      const log = await EmailLog.create({
+        campaign:       campaign._id,
+        recipientEmail: email,
+        recipientName:  `${fn} ${ln}`,
+        trackingToken:  token,
+        status:         isBounced ? 'bounced' : 'delivered',
+        sentAt,
+        deliveredAt:    isBounced ? null : sentAt,
+        bouncedAt:      isBounced ? sentAt : null,
+      });
+
+      if (isBounced) {
+        events.push({
+          campaign:          campaign._id,
+          emailLog:          log._id,
+          type:              'bounce',
+          isFirstOccurrence: true,
+          occurredAt:        sentAt,
+        });
+        continue;
+      }
+
+      // 38% open rate
+      if (Math.random() < 0.38) {
+        const openedAt = new Date(sentAt.getTime() + randInt(1, 48) * 3600000);
+        events.push({
+          campaign:          campaign._id,
+          emailLog:          log._id,
+          type:              'open',
+          isFirstOccurrence: true,
+          device:            rand(DEVICES),
+          occurredAt:        openedAt,
+        });
+
+        // 28% of openers click
+        if (Math.random() < 0.28) {
+          events.push({
+            campaign:          campaign._id,
+            emailLog:          log._id,
+            type:              'click',
+            isFirstOccurrence: true,
+            device:            rand(DEVICES),
+            url:               'https://example.com',
+            occurredAt:        new Date(openedAt.getTime() + randInt(1, 10) * 60000),
+          });
+        }
+      }
+
+      // 1% unsubscribe
+      if (Math.random() < 0.01) {
+        events.push({
+          campaign:          campaign._id,
+          emailLog:          log._id,
+          type:              'unsubscribe',
+          isFirstOccurrence: true,
+          occurredAt:        sentAt,
+        });
+      }
+    }
+
+    if (events.length) await Event.insertMany(events);
+    await recomputeStats(campaign._id);
+    console.log(`  ✓ ${campaign.name} — ${count} logs, ${events.length} events`);
+  }
+
+  console.log('✅  Seed complete! Refresh your browser.');
+  await mongoose.disconnect();
+}
+
+run().catch(err => { console.error('❌ Seed error:', err.message); process.exit(1); });
+Then run:
+
+powershell
+node seed/reportSeed.js
+This creates the EmailLog first (to get its _id), then links every Event to it via emailLog field — exactly matching your schema. Paste the output!
+
+You said: PS D:\prova\ProvaCampaign_BE> npm run dev
+PS D:\prova\ProvaCampaign_BE> npm run dev                                     
+> prova-campaign-backend@1.0.0 dev
+> nodemon server.js
+[nodemon] 3.1.14
+[nodemon] to restart at any time, enter rs
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting node server.js
+🚀  Server running on http://localhost:5000
+✅  MongoDB Atlas connected: [ac-rs44pxg-shard-00-00.0txlpmz.mongodb.net](http://ac-rs44pxg-shard-00-00.0txlpmz.mongodb.net)
+the data is not show in website
+
+17:52
+Claude responded: The server is running but data isn't showing.
+The server is running but data isn't showing. The seed hasn't run yet — run it now in a second terminal (keep the server running in the first):
+
+powershell
+cd D:\prova\ProvaCampaign_BE
+node seed/reportSeed.js
+Paste the output. Also, let's check if the API is returning data — run this in a third terminal:
+
+powershell
+curl http://localhost:5000/api/reports/summary
+curl http://localhost:5000/api/reports/campaigns
+Paste both outputs so I can see whether the issue is the seed, the API, or the frontend.
+
+You said: PS D:\prova> curl http://localhost:5000/api/reports/summary
+PS D:\prova> curl http://localhost:5000/api/reports/summary
+>> curl http://localhost:5000/api/reports/campaigns
+curl : Unable to connect to the remote server
+At line:1 char:1
++ curl http://localhost:5000/api/reports/summary
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: ([System.Net](http://System.Net).HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+curl : Unable to connect to the remote server
+At line:2 char:1
++ curl http://localhost:5000/api/reports/campaigns
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: ([System.Net](http://System.Net).HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+PS D:\prova> cd ProvaCampaign_BE
+PS D:\prova\ProvaCampaign_BE> curl http://localhost:5000/api/reports/summary
+>> curl http://localhost:5000/api/reports/campaigns
+curl : Unable to connect to the remote server
+At line:1 char:1
++ curl http://localhost:5000/api/reports/summary
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: ([System.Net](http://System.Net).HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+curl : Unable to connect to the remote server
+At line:2 char:1
++ curl http://localhost:5000/api/reports/campaigns
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: ([System.Net](http://System.Net).HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+PS D:\prova\ProvaCampaign_BE> cd ProvaCampaign_FE
+cd : Cannot find path 'D:\prova\ProvaCampaign_BE\ProvaCampaign_FE' because it does not exist.
+At line:1 char:1
++ cd ProvaCampaign_FE
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\prova\ProvaC...rovaCampaign_FE:String) [Set-Location], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SetLocationCommand
+
+PS D:\prova\ProvaCampaign_BE> cd ..                                         
+PS D:\prova> cd ProvaCampaign_FE                   
+PS D:\prova\ProvaCampaign_FE> curl http://localhost:5000/api/reports/summary
+>> curl http://localhost:5000/api/reports/campaigns
+curl : Unable to connect to the remote server
+At line:1 char:1
++ curl http://localhost:5000/api/reports/summary
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: ([System.Net](http://System.Net).HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+curl : Unable to connect to the remote server
+At line:2 char:1
++ curl http://localhost:5000/api/reports/campaigns
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: ([System.Net](http://System.Net).HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebException
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+PS D:\prova\ProvaCampaign_FE> > node seed/reportSeed.js
+✅  Connected to MongoDB
+📋  Found 5 campaigns
+🗑   Cleared old data
+  ✓ Diwali Offers 2026 — 82 logs, 45 events
+  ✓ Christmas Blast — 111 logs, 52 events
+  ✓ New Year Wishes — 127 logs, 69 events
+  ✓ Summer Sale — 140 logs, 73 events
+  ✓ Eid Greetings 2026 — 111 logs, 62 events
+✅  Seed complete! Refresh your browser.
+PS D:\prova\ProvaCampaign_BE>
+
+Show more
+17:55
+Claude responded: Seed worked perfectly!
+Seed worked perfectly! But the backend server isn't running — that's why curl failed and the website shows no data. The npm run dev must have stopped.
+
+Open a new terminal and start the backend:
+
+powershell
+cd D:\prova\ProvaCampaign_BE
+npm run dev
+Wait for:
+
+🚀  Server running on http://localhost:5000
+✅  MongoDB Atlas connected
+Then in another terminal start the frontend:
+
+powershell
+cd D:\prova\ProvaCampaign_FE
+npm run dev
+Then open http://localhost:5173/reports and refresh — you should now see:
+
+5 campaigns in the Campaign Performance table
+Stats cards with real numbers (open rate ~38%, click rate ~10%)
+Campaign Status pie chart
+Opens Over Time area chart
+Also check your reportController.js — the getSummary function queries Campaign with 'stats.totalSent': { $gt: 0 } but since your Campaign has no orgId, remove that filter. Open controllers/reportController.js and find getSummary, change:
+
+javascript
+// FIND THIS:
+const campaigns = await Campaign.find({ orgId, 'stats.totalSent': { $gt: 0 } })
+
+// REPLACE WITH:
+const campaigns = await Campaign.find({ 'stats.totalSent': { $gt: 0 } })
+Do the same for getCampaigns — remove orgId from the match:
+
+javascript
+// FIND THIS:
+const match = { orgId };
+
+// REPLACE WITH:
+const match = {};
+And in getCampaignStatusBreakdown and getOpensOverTime — remove the orgId from $match.
+
+Also in getCampaignDetail — remove orgId from the findOne:
+
+javascript
+// FIND THIS:
+const campaign = await Campaign.findOne({ _id: req.params.id, orgId }).lean();
+
+// REPLACE WITH:
+const campaign = await Campaign.findOne({ _id: req.params.id }).lean();
+Save, server auto-restarts, then refresh the browser. Data should populate!
+
+You said: again the data is not showing ?
+
+const Campaign = require('../models/Campaign'); const Event = require('../models/Event'); const mongoose = require('mongoose'); const toObjId = (id) => new mongoose.Types.ObjectId(id); // ── SUMMARY ────────────────────────────────────────────────────────────────── // Reads pre-computed
+
+pasted
+
+again the data is not showing ?
+
+18:01
+Claude responded: I can see the issue — the controller still uses req.
+I can see the issue — the controller still uses req.user.orgId and wrong field names. Replace your entire controllers/reportController.js with this fixed version:
+
+javascript
+const Campaign = require('../models/Campaign');
+const EmailLog = require('../models/EmailLog');
+const Event    = require('../models/Event');
+
+// ── SUMMARY ──────────────────────────────────────────────────────────────────
+exports.getSummary = async (req, res) => {
+  try {
+    const campaigns = await Campaign.find({ 'stats.totalSent': { $gt: 0 } })
+      .select('stats').lean();
+
+    const totals = campaigns.reduce((acc, c) => {
+      acc.sent   += c.stats.totalSent         || 0;
+      acc.delivered += c.stats.totalDelivered || 0;
+      acc.opens  += c.stats.totalOpens        || 0;
+      acc.clicks += c.stats.totalClicks       || 0;
+      acc.bounces+= c.stats.totalBounced      || 0;
+      acc.unsubs += c.stats.totalUnsubscribes || 0;
+      return acc;
+    }, { sent: 0, delivered: 0, opens: 0, clicks: 0, bounces: 0, unsubs: 0 });
+
+    const base = totals.delivered || 1;
+
+    res.json({
+      success: true,
+      data: {
+        totalSent:       totals.sent,
+        totalDelivered:  totals.delivered,
+        openRate:        Math.round((totals.opens   / base)             * 1000) / 10,
+        clickRate:       Math.round((totals.clicks  / base)             * 1000) / 10,
+        bounceRate:      Math.round((totals.bounces / (totals.sent||1)) * 1000) / 10,
+        unsubscribeRate: Math.round((totals.unsubs  / base)             * 1000) / 10,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── CAMPAIGN TABLE ────────────────────────────────────────────────────────────
+exports.getCampaigns = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, status } = req.query;
+    const match = {};
+    if (status) match.status = status;
+
+    const skip  = (Number(page) - 1) * Number(limit);
+    const total = await Campaign.countDocuments(match);
+    const campaigns = await Campaign.find(match)
+      .select('name status stats createdAt publishedAt')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    res.json({
+      success: true,
+      data: campaigns,
+      pagination: { page: Number(page), total, pages: Math.ceil(total / Number(limit)) },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── CAMPAIGN STATUS PIE ───────────────────────────────────────────────────────
+exports.getCampaignStatusBreakdown = async (req, res) => {
+  try {
+    const breakdown = await Campaign.aggregate([
+      { $group: { _id: '$status', count: { $sum: 1 } } },
+    ]);
+    res.json({ success: true, data: breakdown });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── OPENS OVER TIME ───────────────────────────────────────────────────────────
+exports.getOpensOverTime = async (req, res) => {
+  try {
+    const days = Number(req.query.days || 30);
+    const from = new Date(Date.now() - days * 86400000);
+
+    const data = await Event.aggregate([
+      { $match: { type: 'open', isFirstOccurrence: true, occurredAt: { $gte: from } } },
+      {
+        $group: {
+          _id:   { $dateToString: { format: '%Y-%m-%d', date: '$occurredAt' } },
+          opens: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+      { $project: { date: '$_id', opens: 1, _id: 0 } },
+    ]);
+
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ── SINGLE CAMPAIGN DRILL-DOWN ────────────────────────────────────────────────
+exports.getCampaignDetail = async (req, res) => {
+  try {
+    const campaign = await Campaign.findById(req.params.id).lean();
+    if (!campaign) return res.status(404).json({ success: false, message: 'Campaign not found' });
+
+    // Use correct field name: campaign (not campaignId)
+    const logs = await EmailLog.find({ campaign: campaign._id }).lean();
+
+    const events = await Event.find({ campaign: campaign._id }).lean();
+
+    // Map events by emailLog id
+    const eventMap = {};
+    events.forEach(e => {
+      const key = e.emailLog?.toString();
+      if (!eventMap[key]) eventMap[key] = { opened: false, clicked: false, bounced: false, unsubscribed: false };
+      if (e.type === 'open')        eventMap[key].opened       = true;
+      if (e.type === 'click')       eventMap[key].clicked      = true;
+      if (e.type === 'bounce')      eventMap[key].bounced      = true;
+      if (e.type === 'unsubscribe') eventMap[key].unsubscribed = true;
+    });
+
+    const history = logs.map(log => {
+      const ev = eventMap[log._id?.toString()] || {};
+      return {
+        email:        log.recipientEmail || '—',
+        name:         log.recipientName  || '—',
+        status:       log.status         || 'sent',
+        opened:       ev.opened          || false,
+        clicked:      ev.clicked         || false,
+        bounced:      ev.bounced         || false,
+        unsubscribed: ev.unsubscribed    || false,
+        sentAt:       log.sentAt,
+      };
+    });
+
+    res.json({
+      success: true,
+      data: { campaign, stats: campaign.stats || {}, history },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+Save it — nodemon will auto-restart. Then refresh http://localhost:5173/reports and all data should appear. The key fixes were removing all orgId filters and using campaign / emailLog field names that match your actual schema.
+
+
+You are out of free messages until 10:40 PM
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+

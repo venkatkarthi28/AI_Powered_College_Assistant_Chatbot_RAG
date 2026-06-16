@@ -1,0 +1,9 @@
+python -c "
+with open('.env', 'w', encoding='utf-8') as f:
+    f.write('AIzaSyD6K1Ji3NYfyA93ue5PMYDabOzw8iKldOs\n')
+    f.write('LOCAL_MODEL_NAME=TinyLlama/TinyLlama-1.1B-Chat-v1.0\n')
+    f.write('FLASK_DEBUG=True\n')
+    f.write('FLASK_HOST=0.0.0.0\n')
+    f.write('FLASK_PORT=5000\n')
+print('Done')
+"

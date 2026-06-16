@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – AskCampus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    /* Admin-specific styles */
+    .admin-layout {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow-y: auto;
+      height: calc(100vh - var(--header-h));
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .card-title {
+      font-size: 16px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 13px; color: var(--text2);
+      margin-bottom: 20px; line-height: 1.5;
+    }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--surface2);
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .upload-zone .upload-icon { font-size: 40px; margin-bottom: 12px; }
+    .upload-zone p { font-size: 14px; color: var(--text2); }
+    .upload-zone span { font-size: 12px; color: var(--text2); margin-top: 4px; display: block; }
+    #fileInput { display: none; }
+
+    /* Upload result */
+    .upload-result {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500;
+      display: none;
+    }
+    .upload-result.success { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #16a34a; }
+    .upload-result.error   { background: rgba(239,68,68,0.1);  border: 1px solid #ef4444; color: #dc2626; }
+
+    /* Progress bar */
+    .progress-wrap { margin-top: 12px; display: none; }
+    .progress-bar {
+      height: 6px; background: var(--surface2); border-radius: 4px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--user-bg);
+      border-radius: 4px; width: 0%;
+      transition: width 0.3s ease;
+      animation: progress-pulse 1.5s infinite;
+    }
+    @keyframes progress-pulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+
+    /* Documents list */
+    .doc-list { display: flex; flex-direction: column; gap: 10px; }
+    .doc-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      transition: all var(--transition);
+    }
+    .doc-item:hover { border-color: var(--accent); }
+    .doc-info { display: flex; align-items: center; gap: 10px; }
+    .doc-icon { font-size: 20px; }
+    .doc-name { font-size: 13px; font-weight: 600; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+    .doc-size { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .delete-btn {
+      background: rgba(239,68,68,0.1); border: 1px solid #ef4444;
+      color: #ef4444; border-radius: var(--radius-sm);
+      padding: 6px 14px; font-family: 'Sora', sans-serif;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all var(--transition);
+    }
+    .delete-btn:hover { background: #ef4444; color: #fff; }
+
+    .no-docs {
+      text-align: center; padding: 32px;
+      color: var(--text2); font-size: 13px;
+    }
+
+    /* Action buttons */
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .action-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      cursor: pointer; text-align: left;
+      font-family: 'Sora', sans-serif;
+      transition: all var(--transition);
+    }
+    .action-btn:hover { border-color: var(--accent); background: var(--accent-glow); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .action-btn .btn-icon { font-size: 24px; margin-bottom: 8px; }
+    .action-btn .btn-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .action-btn .btn-desc  { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+    .stat-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px; text-align: center;
+    }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+    /* Action result */
+    .action-result {
+      margin-top: 12px; padding: 12px 16px;
+      border-radius: var(--radius-sm); font-size: 13px;
+      display: none;
+    }
+    .action-result.success { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #16a34a; }
+    .action-result.error   { background: rgba(239,68,68,0.1);  border: 1px solid #ef4444; color: #dc2626; }
+
+    /* History */
+    .history-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .history-table th {
+      text-align: left; padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text2); font-weight: 600; font-size: 11px; text-transform: uppercase;
+    }
+    .history-table td {
+      padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text);
+      vertical-align: top;
+    }
+    .history-table tr:hover td { background: var(--surface2); }
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 12px;
+      font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+    }
+    .badge.groq   { background: rgba(249,115,22,0.1); color: #f97316; }
+    .badge.ctx    { background: rgba(100,116,139,0.1); color: #64748b; }
+    .badge.gemini { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-wrap">
+        <div class="logo-icon">⚙️</div>
+        <div>
+          <h1 class="header-title">Admin Panel</h1>
+          <p class="header-subtitle">Manage documents · Control knowledge base</p>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" onclick="toggleTheme()" id="themeToggle" title="Toggle Theme">🌙</button>
+      <a href="/" class="admin-btn">💬 Back to Chatbot</a>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+
+    <!-- UPLOAD CARD -->
+    <div class="card">
+      <div class="card-title">📤 Upload Document</div>
+      <div class="card-desc">Upload PDF documents to add them to the chatbot's knowledge base. Text is extracted, chunked, and indexed in FAISS automatically.</div>
+
+      <div class="upload-zone" id="uploadZone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event)">
+        <div class="upload-icon">📁</div>
+        <p>Click or drag PDF here to upload</p>
+        <span>Only PDF files are supported · Max size: 50MB</span>
+      </div>
+      <input type="file" id="fileInput" accept=".pdf" onchange="uploadFile(this.files[0])">
+
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">Uploading and indexing...</p>
+      </div>
+      <div class="upload-result" id="uploadResult"></div>
+    </div>
+
+    <!-- DOCUMENTS CARD -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:0">📚 Indexed Documents</div>
+        <button class="load-btn" onclick="loadDocuments()" style="font-size:13px;padding:6px 14px;">🔄 Refresh</button>
+      </div>
+      <div class="doc-list" id="docList">
+        <div class="no-docs">Click Refresh to load documents</div>
+      </div>
+    </div>
+
+    <!-- ACTIONS CARD -->
+    <div class="card">
+      <div class="card-title">🔧 Actions</div>
+      <div class="card-desc">System management tools for the knowledge base.</div>
+      <div class="actions-grid">
+        <button class="action-btn" onclick="rebuildIndex()">
+          <div class="btn-icon">🔄</div>
+          <div class="btn-title">Rebuild Vector Index</div>
+          <div class="btn-desc">Reprocess all documents and rebuild FAISS index</div>
+        </button>
+        <button class="action-btn" onclick="loadStats()">
+          <div class="btn-icon">📊</div>
+          <div class="btn-title">View System Stats</div>
+          <div class="btn-desc">Check chatbot status, document count, model info</div>
+        </button>
+      </div>
+      <div class="action-result" id="actionResult"></div>
+      <div class="stats-grid" id="statsGrid" style="display:none"></div>
+    </div>
+
+    <!-- HISTORY CARD -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:0">💬 Recent Conversations</div>
+        <button class="load-btn" onclick="loadAdminHistory()" style="font-size:13px;padding:6px 14px;">📥 Load</button>
+      </div>
+      <div id="adminHistory">
+        <p class="no-docs">Click Load to view recent conversations.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/js/admin.js"></script>
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+    const saved = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+  </script>
+</body>
+</html>

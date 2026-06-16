@@ -1,0 +1,38 @@
+# ══════════════════════════════════════════════════════════
+# requirements.txt — AI College Chatbot Dependencies
+# ══════════════════════════════════════════════════════════
+#
+# INSTALL COMMAND:
+#   pip install -r requirements.txt
+#
+# NOTE FOR 8GB RAM LAPTOPS:
+#   Install PyTorch CPU-only version first (saves ~2GB):
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+#   Then run: pip install -r requirements.txt
+# ══════════════════════════════════════════════════════════
+
+# ── Web Framework ─────────────────────────────────────
+flask==3.0.0
+flask-cors==4.0.0          # Allow frontend to call backend API
+
+# ── PDF Processing ────────────────────────────────────
+PyMuPDF>=1.24.11            # PDF text extraction (fitz)
+
+# ── AI / Embeddings ───────────────────────────────────
+sentence-transformers==2.7.0   # Sentence embedding model (all-MiniLM-L6-v2)
+faiss-cpu==1.7.4               # Facebook FAISS vector database (CPU version)
+
+# ── Local LLM (Optional but recommended) ──────────────
+transformers==4.40.0           # Hugging Face model loading
+# torch  ← Install separately (see note above)
+
+# ── HTTP Requests (for Gemini API) ────────────────────
+requests==2.31.0               # HTTP client for Gemini API calls
+
+# ── Utilities ─────────────────────────────────────────
+werkzeug==3.0.1                # Flask utility (secure_filename, etc.)
+numpy==1.26.4                  # Numerical arrays (required by FAISS + embeddings)
+
+# ── Optional: LangChain (if you want to extend later) ─
+# langchain==0.2.0
+# langchain-community==0.2.0

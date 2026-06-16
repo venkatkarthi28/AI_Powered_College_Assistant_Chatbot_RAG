@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AskCampus - Excel Group Institutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-wrap">
+        <div class="logo-icon">🎓</div>
+        <div>
+          <h1 class="header-title">AskCampus</h1>
+          <p class="header-subtitle">Excel Group Institutions · Powered by RAG</p>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-badge" id="statusBadge">
+        <span class="status-dot"></span>
+        <span id="statusText">Checking...</span>
+      </div>
+      <button class="icon-btn" id="langBtn" title="Switch Language" onclick="toggleLanguage()">🇬🇧 EN</button>
+      <button class="icon-btn" id="themeToggle" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+      <button class="icon-btn" title="Clear Chat" onclick="clearChat()">🗑️</button>
+      <a href="/admin" class="admin-btn">⚙️ Admin</a>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="search-wrap">
+        <input type="text" id="questionSearch" placeholder="🔍 Search questions..." oninput="filterSuggestions(this.value)" />
+      </div>
+
+      <div class="category-tabs">
+        <button class="cat-tab active" onclick="filterCategory('all',this)">All</button>
+        <button class="cat-tab" onclick="filterCategory('fees',this)">Fees</button>
+        <button class="cat-tab" onclick="filterCategory('exams',this)">Exams</button>
+        <button class="cat-tab" onclick="filterCategory('hostel',this)">Hostel</button>
+        <button class="cat-tab" onclick="filterCategory('events',this)">Events</button>
+        <button class="cat-tab" onclick="filterCategory('placement',this)">Placement</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">💡 Quick Questions</h3>
+        <div class="suggestions" id="suggestionsList">
+          <button class="suggestion-btn" data-cat="fees"      data-q="What is the fee for B.E. IT?"               onclick="askSuggestion(this.dataset.q)">💰 Fee for B.E. IT?</button>
+          <button class="suggestion-btn" data-cat="fees"      data-q="What are the other fees like lab and library?" onclick="askSuggestion(this.dataset.q)">💳 Other fees?</button>
+          <button class="suggestion-btn" data-cat="exams"     data-q="When are the internal exams in 2026?"        onclick="askSuggestion(this.dataset.q)">📝 Internal exams 2026?</button>
+          <button class="suggestion-btn" data-cat="exams"     data-q="What is the minimum pass mark?"              onclick="askSuggestion(this.dataset.q)">✅ Minimum pass mark?</button>
+          <button class="suggestion-btn" data-cat="hostel"    data-q="What is the hostel fee per year?"            onclick="askSuggestion(this.dataset.q)">🏠 Hostel fee?</button>
+          <button class="suggestion-btn" data-cat="hostel"    data-q="What is the hostel in-time?"                 onclick="askSuggestion(this.dataset.q)">⏰ Hostel in-time?</button>
+          <button class="suggestion-btn" data-cat="events"    data-q="When is Excellenta 2026?"                    onclick="askSuggestion(this.dataset.q)">🎉 Excellenta 2026?</button>
+          <button class="suggestion-btn" data-cat="events"    data-q="When is pongal celebration?"                 onclick="askSuggestion(this.dataset.q)">🪔 Pongal celebration?</button>
+          <button class="suggestion-btn" data-cat="events"    data-q="When is Founders Day?"                       onclick="askSuggestion(this.dataset.q)">🏆 Founders Day?</button>
+          <button class="suggestion-btn" data-cat="placement" data-q="What is the minimum CGPA for placement?"     onclick="askSuggestion(this.dataset.q)">🎯 CGPA for placement?</button>
+          <button class="suggestion-btn" data-cat="placement" data-q="Which companies visit for campus placement?" onclick="askSuggestion(this.dataset.q)">🏢 Companies visiting?</button>
+          <button class="suggestion-btn" data-cat="placement" data-q="What is the average placement package?"      onclick="askSuggestion(this.dataset.q)">💼 Average package?</button>
+          <button class="suggestion-btn" data-cat="general"   data-q="What is the dress code?"                    onclick="askSuggestion(this.dataset.q)">👔 Dress code?</button>
+          <button class="suggestion-btn" data-cat="general"   data-q="What scholarships are available?"            onclick="askSuggestion(this.dataset.q)">🎓 Scholarships?</button>
+          <button class="suggestion-btn" data-cat="general"   data-q="What is the minimum attendance required?"    onclick="askSuggestion(this.dataset.q)">📊 Minimum attendance?</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="history-header">
+          <h3 class="sidebar-title">📜 Chat History</h3>
+          <button class="load-btn" onclick="loadHistory()">Load</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="no-history">No history yet</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CHAT AREA -->
+    <main class="chat-area">
+      <div class="messages" id="messages">
+        <div class="message bot-message welcome-msg">
+          <div class="avatar">🤖</div>
+          <div class="bubble">
+            <div class="welcome-content">
+              <h2>👋 Hello! I'm your <strong>AskCampus</strong></h2>
+              <p>Ask me anything about Excel Group Institutions, Komarapalayam</p>
+              <div class="topic-grid">
+                <span class="topic-chip" onclick="askSuggestion('What is the fee for B.E. IT?')">💰 Fees</span>
+                <span class="topic-chip" onclick="askSuggestion('What scholarships are available?')">🎓 Scholarships</span>
+                <span class="topic-chip" onclick="askSuggestion('Which companies visit for campus placement?')">🏢 Placement</span>
+                <span class="topic-chip" onclick="askSuggestion('What are the hostel facilities?')">🏠 Hostel</span>
+                <span class="topic-chip" onclick="askSuggestion('When are the internal exams in 2026?')">📝 Exams</span>
+                <span class="topic-chip" onclick="askSuggestion('When is Excellenta 2026?')">🎉 Events</span>
+              </div>
+              <div class="lang-info">🌐 Click <strong>🇬🇧 EN</strong> in header to switch to Tamil / English</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="typing-indicator" id="typingIndicator" style="display:none">
+        <div class="avatar">🤖</div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-wrap">
+          <button class="icon-btn" id="micBtn" onclick="toggleVoice()" title="Click to speak" style="flex-shrink:0;width:40px;height:40px;">🎤</button>
+          <textarea
+            id="userInput"
+            placeholder="Ask anything about the college..."
+            rows="1"
+            onkeydown="handleKeyDown(event)"
+            oninput="autoResize(this)"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <span class="send-icon">➤</span>
+          </button>
+        </div>
+        <p class="input-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for new line · 🎤 mic to speak</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/js/chat.js"></script>
+</body>
+</html>

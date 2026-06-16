@@ -1,0 +1,31 @@
+EXCEL GROUP INSTITUTIONS - KOMARAPALAYAM
+SECTION: ACADEMICS
+
+The B.E Information Technology program consists of 8 semesters.
+Minimum attendance required per semester is 75 percent.
+Total credits required to complete B.E IT is 160 credits.
+Internal assessments are conducted twice per semester.
+Each internal exam carries 50 marks.
+CGPA is calculated on a 10-point grading scale.
+Elective subjects are offered from 5th semester onwards.
+Students must complete mini project in 6th semester.
+Final year project is conducted in 8th semester.
+
+DEPARTMENTS:
+B.E. Computer Science and Engineering CSE
+B.E. Electronics and Communication Engineering ECE
+B.E. Mechanical Engineering MECH
+B.E. Civil Engineering CIVIL
+B.E. Electrical and Electronics Engineering EEE
+M.E. Computer Science and Engineering
+MBA Master of Business Administration
+B.Tech INFORMATION TECHNOLOGY
+
+CLASS TIMINGS:
+Morning Session 9:30 AM to 12:15 PM
+Afternoon Session 1:00 PM to 4:45 PM
+
+INTERNAL ASSESSMENT:
+3 internal tests per semester.
+Internal marks 20 percent of total marks.
+University exam 80 percent of total marks.

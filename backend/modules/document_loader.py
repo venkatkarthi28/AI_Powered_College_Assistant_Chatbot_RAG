@@ -11,8 +11,8 @@ from sentence_transformers import SentenceTransformer
 from werkzeug.utils import secure_filename
 
 # ── OCR Configuration ─────────────────────────────────
-import pytesseract
-from pdf2image import convert_from_path
+#import pytesseract
+#from pdf2image import convert_from_path
 from PIL import Image
 
 # Exact paths on your machine

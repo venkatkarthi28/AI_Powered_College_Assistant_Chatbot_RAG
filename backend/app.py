@@ -44,7 +44,7 @@ os.makedirs(os.path.dirname(HISTORY_DB), exist_ok=True)
 
 # Create module instances
 doc_loader   = DocumentLoader(UPLOAD_FOLDER, VECTORDB_FOLDER)
-query_proc   = QueryProcessor(VECTORDB_FOLDER, embedder=doc_loader.embedder)
+query_proc   = QueryProcessor(VECTORDB_FOLDER, doc_loader=doc_loader)
 llm_handler  = LLMHandler()
 chat_history = ChatHistory(HISTORY_DB)
 

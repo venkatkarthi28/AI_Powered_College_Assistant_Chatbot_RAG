@@ -22,31 +22,38 @@ class QueryProcessor:
     the most relevant document chunks from FAISS.
     """
 
-    def __init__(self, vectordb_folder: str, embedder=None):
+    def __init__(self, vectordb_folder: str, doc_loader=None):
         """
         Initialize the QueryProcessor.
 
         Args:
             vectordb_folder: Directory containing FAISS index and metadata
-            embedder: A pre-loaded SentenceTransformer instance, shared with
-                      DocumentLoader. This avoids loading the embedding model
-                      twice into memory (important on low-RAM hosts like
-                      Render's free tier, which caps at 512MB).
+            doc_loader: The shared DocumentLoader instance. Its `.embedder`
+                        property is reused here (lazily) so the embedding
+                        model is loaded only once in memory, and only when
+                        actually first needed -- not at startup. This keeps
+                        Flask's port binding fast and avoids duplicating the
+                        ~300-400MB model in RAM (important on hosts like
+                        Render's free tier, which caps at 512MB).
         """
         self.vectordb_folder = vectordb_folder
         self.index_path      = os.path.join(vectordb_folder, "faiss.index")
         self.metadata_path   = os.path.join(vectordb_folder, "metadata.json")
+        self._doc_loader     = doc_loader
+        self._own_embedder   = None
 
-        if embedder is not None:
-            print("[QueryProcessor] Using shared embedding model.")
-            self.embedder = embedder
-        else:
-            # Fallback: load our own model if none was shared (e.g. standalone use)
-            print("[QueryProcessor] No shared embedder provided, loading own model...")
+        print("[QueryProcessor] Ready (embedding model will load on first use).")
+
+    @property
+    def embedder(self):
+        """Reuse the shared DocumentLoader's embedder if available, else load our own."""
+        if self._doc_loader is not None:
+            return self._doc_loader.embedder
+        if self._own_embedder is None:
+            print("[QueryProcessor] No shared loader provided, loading own model...")
             from sentence_transformers import SentenceTransformer
-            self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
-
-        print("[QueryProcessor] Ready.")
+            self._own_embedder = SentenceTransformer("all-MiniLM-L6-v2")
+        return self._own_embedder
 
     # ──────────────────────────────────────────────────
     # PUBLIC METHODS

@@ -19,15 +19,27 @@ class DocumentLoader:
         self.index_path      = os.path.join(vectordb_folder, "faiss.index")
         self.metadata_path   = os.path.join(vectordb_folder, "metadata.json")
 
-        print("[DocumentLoader] Loading sentence embedding model...")
-        self.embedder      = SentenceTransformer("all-MiniLM-L6-v2")
+        # Lazy-load the embedding model: don't load it here, so that Flask
+        # can bind to its port immediately on startup (important for hosts
+        # like Render, which kill the deploy if no port is detected within
+        # a few minutes). The model loads on first actual use instead.
+        self._embedder      = None
         self.embedding_dim = 384
         self.chunk_size    = 400
         self.chunk_overlap = 80
         self.index         = None
         self.metadata      = []
         self._load_existing_index()
-        print("[DocumentLoader] Ready.")
+        print("[DocumentLoader] Ready (embedding model will load on first use).")
+
+    @property
+    def embedder(self):
+        """Lazily load the sentence embedding model on first access."""
+        if self._embedder is None:
+            print("[DocumentLoader] Loading sentence embedding model (first use)...")
+            self._embedder = SentenceTransformer("all-MiniLM-L6-v2")
+            print("[DocumentLoader] Embedding model loaded.")
+        return self._embedder
 
     def load_and_index(self, file) -> dict:
         filename = secure_filename(file.filename)

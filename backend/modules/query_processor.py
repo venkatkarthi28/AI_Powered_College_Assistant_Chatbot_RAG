@@ -14,7 +14,6 @@ import os
 import json
 import numpy as np
 import faiss
-from sentence_transformers import SentenceTransformer
 
 
 class QueryProcessor:
@@ -23,32 +22,40 @@ class QueryProcessor:
     the most relevant document chunks from FAISS.
     """
 
-    def __init__(self, vectordb_folder: str):
+    def __init__(self, vectordb_folder: str, embedder=None):
         """
         Initialize the QueryProcessor.
 
         Args:
             vectordb_folder: Directory containing FAISS index and metadata
+            embedder: A pre-loaded SentenceTransformer instance, shared with
+                      DocumentLoader. This avoids loading the embedding model
+                      twice into memory (important on low-RAM hosts like
+                      Render's free tier, which caps at 512MB).
         """
         self.vectordb_folder = vectordb_folder
         self.index_path      = os.path.join(vectordb_folder, "faiss.index")
         self.metadata_path   = os.path.join(vectordb_folder, "metadata.json")
 
-        # Use the SAME embedding model as DocumentLoader
-        # This ensures question and document vectors are in the same space
-        print("[QueryProcessor] Loading embedding model...")
-        self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
+        if embedder is not None:
+            print("[QueryProcessor] Using shared embedding model.")
+            self.embedder = embedder
+        else:
+            # Fallback: load our own model if none was shared (e.g. standalone use)
+            print("[QueryProcessor] No shared embedder provided, loading own model...")
+            from sentence_transformers import SentenceTransformer
+            self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
         print("[QueryProcessor] Ready.")
 
-    # ─────────────────────────────────────────────────
+    # ──────────────────────────────────────────────────
     # PUBLIC METHODS
-    # ─────────────────────────────────────────────────
+    # ──────────────────────────────────────────────────
 
     def retrieve_context(self, question: str, top_k: int = 4) -> list:
         """
         Main retrieval pipeline:
-        Question → Embedding → FAISS Search → Top-K Chunks
+        Question -> Embedding -> FAISS Search -> Top-K Chunks
 
         Args:
             question: User's natural language question
@@ -98,9 +105,9 @@ class QueryProcessor:
         print(f"[QueryProcessor] Retrieved {len(results)} relevant chunks for: '{question[:50]}...'")
         return results
 
-    # ─────────────────────────────────────────────────
+    # ──────────────────────────────────────────────────
     # PRIVATE METHODS
-    # ─────────────────────────────────────────────────
+    # ──────────────────────────────────────────────────
 
     def _embed_question(self, question: str) -> np.ndarray:
         """
@@ -110,7 +117,7 @@ class QueryProcessor:
             question: The user's question text
 
         Returns:
-            numpy array of shape (1, embedding_dim) — FAISS requires 2D input
+            numpy array of shape (1, embedding_dim) -- FAISS requires 2D input
         """
         embedding = self.embedder.encode(
             [question],                # Must be a list even for single input

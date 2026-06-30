@@ -47,6 +47,24 @@ doc_loader   = DocumentLoader(UPLOAD_FOLDER, VECTORDB_FOLDER)
 query_proc   = QueryProcessor(VECTORDB_FOLDER, doc_loader=doc_loader)
 llm_handler  = LLMHandler()
 chat_history = ChatHistory(HISTORY_DB)
+# ─────────────────────────────────────────────────────
+# Pre-warm the embedding model in the background
+# ─────────────────────────────────────────────────────
+# Flask binds to its port immediately (so Render's health check passes),
+# but we kick off loading the heavy embedding model in a background thread
+# right away, so it's ready before the first real user question arrives
+# instead of making that first request wait 30-60+ seconds and risk timing
+# out at Render's reverse proxy.
+import threading
+
+def _prewarm_embedder():
+    try:
+        _ = doc_loader.embedder  # triggers lazy load
+        print("[app.py] Embedding model pre-warmed and ready.")
+    except Exception as e:
+        print(f"[app.py] Pre-warm failed: {e}")
+
+threading.Thread(target=_prewarm_embedder, daemon=True).start()
 
 # ─────────────────────────────────────────────────────
 # PAGE ROUTES

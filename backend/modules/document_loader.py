@@ -1,5 +1,5 @@
 """
-Document Loader - OCR version for scanned PDFs
+Document Loader - PyMuPDF text extraction (no OCR)
 """
 
 import os
@@ -9,15 +9,6 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 from werkzeug.utils import secure_filename
-
-# ── OCR Configuration ─────────────────────────────────
-#import pytesseract
-#from pdf2image import convert_from_path
-from PIL import Image
-
-# Exact paths on your machine
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-POPPLER_PATH = r"C:\Users\VENKATKARTHIKEYAN.K\Downloads\Release-25.12.0-0\poppler-25.12.0\Library\bin"
 
 
 class DocumentLoader:
@@ -47,7 +38,7 @@ class DocumentLoader:
         text = self._extract_text_from_pdf(filepath)
         if not text.strip():
             os.remove(filepath)
-            raise ValueError("Could not extract any text from this PDF even with OCR.")
+            raise ValueError("Could not extract any text from this PDF. Scanned/image-only PDFs are not supported.")
 
         print(f"[DocumentLoader] Extracted {len(text)} characters from {filename}")
         chunks     = self._split_into_chunks(text, filename)
@@ -103,9 +94,8 @@ class DocumentLoader:
 
     def _extract_text_from_pdf(self, filepath: str) -> str:
         """
-        Extract text from PDF.
-        First tries direct text extraction (fast).
-        If that gives nothing, uses OCR (for scanned PDFs).
+        Extract text from PDF using direct text extraction only.
+        Scanned/image-only PDFs (no embedded text layer) are not supported.
         """
         import fitz
         doc  = fitz.open(filepath)
@@ -114,45 +104,12 @@ class DocumentLoader:
             text += page.get_text("text")
         doc.close()
 
-        # If direct extraction worked, use it
         if len(text.strip()) > 50:
             print(f"[DocumentLoader] Direct text extraction succeeded.")
-            return text
+        else:
+            print(f"[DocumentLoader] WARNING: Little or no text found. This PDF may be a scanned image, which is not supported.")
 
-        # Otherwise use OCR
-        print(f"[DocumentLoader] No text found directly. Using OCR (this takes 1-2 minutes)...")
-        return self._ocr_pdf(filepath)
-
-    def _ocr_pdf(self, filepath: str) -> str:
-        """Convert PDF pages to images and run Tesseract OCR on each page."""
-        try:
-            # Convert PDF pages to images
-            pages = convert_from_path(
-                filepath,
-                dpi=200,                    # 200 DPI is good balance of speed vs accuracy
-                poppler_path=POPPLER_PATH
-            )
-            print(f"[DocumentLoader] OCR: Processing {len(pages)} pages...")
-
-            all_text = []
-            for i, page_img in enumerate(pages):
-                print(f"[DocumentLoader] OCR: Page {i+1}/{len(pages)}...")
-                # Run Tesseract OCR on the page image
-                page_text = pytesseract.image_to_string(
-                    page_img,
-                    lang="eng",
-                    config="--psm 6"   # psm 6 = assume uniform block of text (good for tables)
-                )
-                if page_text.strip():
-                    all_text.append(f"[Page {i+1}]\n{page_text}")
-
-            full_text = "\n\n".join(all_text)
-            print(f"[DocumentLoader] OCR complete. Extracted {len(full_text)} characters.")
-            return full_text
-
-        except Exception as e:
-            print(f"[DocumentLoader] OCR failed: {e}")
-            return ""
+        return text
 
     def _split_into_chunks(self, text: str, source: str) -> list:
         chunks = []
@@ -172,7 +129,7 @@ class DocumentLoader:
                 end   = start + self.chunk_size
                 chunk = text[start:end]
                 if chunk.strip():
-                    chunks.append({"text": chunk.strip(), "source": source, "chunk_id": chunk_id})
+                    chunks.append({"text": chunk.strip(), "source": source, "chunk_id":chunk_id})
                     chunk_id += 1
                 start += self.chunk_size - self.chunk_overlap
 
